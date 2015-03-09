@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form>
+
+	<fieldset>
+
+    	<field name="id" type="hidden" default="0" 
+	
+            readonly="true"
+            id="input_id"              
+        /> 
+
+       	<field name="created_by" type="createdby" default="" 
+        /> 
+               
+        <field name="created" type="timecreated" default="" 
+        /> 
+ 
+       	<field name="title" type="text"
+                
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_TITLE"
+            maxlength="210"
+            class="uk-width-1-1"   
+            required="true"
+            tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_TITLE"
+            filter="string"
+        
+        />
+
+       <field name="category" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_CATEGORY"
+            multiple="false"
+            onchange="jQuery('#address_elm_wrapper').toggleClass('visibility-hidden');jQuery('#address_elm').prop('required', function(i, v) { return !v; });"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="virtual">COM_DW_OPPORTUNITIES_VIRTUAL</option>
+                <option value="local">COM_DW_OPPORTUNITIES_LOCAL</option>
+        </field> 
+
+
+		<!--
+       <field name="age" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_AGE"
+            menu_published="0"
+            filter="raw"
+            multiple="false"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="kids">COM_DW_OPPORTUNITIES_FORM_OPPORTUNITY_AGE_KIDS</option>
+                <option value="teens">COM_DW_OPPORTUNITIES_FORM_OPPORTUNITY_AGE_TEENS</option>
+                <option value="adults">COM_DW_OPPORTUNITIES_FORM_OPPORTUNITY_AGE_ADULTS</option>
+                <option value="mature">COM_DW_OPPORTUNITIES_FORM_OPPORTUNITY_AGE_MATURE</option>
+        </field> 
+		-->
+
+		<!--
+		<field name="filter_age" type="list" onchange="this.form.submit();">
+			<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_FILTER</option>
+			<option value="kids">Kids</option>
+			<option value="teens">Teens</option>
+			<option value="adults">Adults</option>
+			<option value="mature">Mature</option>
+		</field> 
+		-->
+
+		
+
+       <field name="description" type="editor"
+                
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_DESCRIPTION"
+			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_DESCRIPTION" 
+			rows="10"
+
+			height="200px"
+			buttons="false"
+			editor="tinymce"
+			filter="safehtml"
+
+		/> 
+
+
+       <field name="lat" type="text"
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_LAT" 
+    	/> 
+
+       <field name="lng" type="text"
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_LNG"
+        /> 
+
+        <field
+			name="state"
+			type="radio"
+			label="JSTATUS"
+			default="0">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field> 
+
+		<field name="checked_out" type="hidden" filter="unset" />
+        <field name="checked_out_time" type="hidden" filter="unset" /> 
+
+	</fieldset> 
+
+	<fieldset addfieldpath="/components/com_donorwiz/models/fields/">
+
+		<field name="causearea" type="donorwizcauseareas" 
+			default="" 
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_CAUSEAREA" 
+            required="true"
+		/>
+		
+		<field name="skills" type="donorwizskills" 
+			default="" 
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_SKILLS"
+            required="true"
+
+		/>
+
+		<field name="image" type="donorwizupload"
+			
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_IMAGE"
+			message_file_not_allowed="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_IMAGE_FILE_NOT_ALLOWED" 
+			message_file_upload_error="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_IMAGE_FILE_UPLOAD_ERROR" 
+			actionoption="com_donorwiz"
+			uploadtask="s3.upload"
+			deletetask="s3.delete"
+			allow="*.(jpg|gif|png)"
+			objecttype="volunteering_opportunity"
+		
+		/>
+		
+		<field name="address" type="locationpicker"
+		    
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_ADDRESS"
+			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_ADDRESS"
+			id="locationpicker"
+            addressname="address"
+            latname="lat"
+            lngname="lng"
+            radiusname="radius"
+            radius="0"
+            class="uk-width-1-1"
+			
+		/>
+		
+       <field name="date_start" type="uikitdatepicker"
+	   
+			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_DATE_START"
+			onchange="jQuery('#time_start_elm_wrapper').toggleClass('visibility-hidden');"
+            timelement="time_start"   
+            default=""   
+        /> 
+
+		
+       <field name="date_end" type="uikitdatepicker"
+	   
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_DATE_END"
+			onchange="jQuery('#time_end_elm_wrapper').toggleClass('visibility-hidden');"
+            timelement="time_end"   
+			default=""
+        /> 
+
+       <field name="time_start" type="uikittimepicker"
+
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_TIME_START"
+            datelement="date_start"   
+            default=""   
+        /> 
+
+		<field name="time_end" type="uikittimepicker"
+                
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_TIME_END"
+            datelement="date_end"   
+			default=""
+        />
+		
+	</fieldset>
+	
+	<fields name="parameters" label="COM_CONTENT_FIELD_IMAGE_OPTIONS">
+	   
+	   <field name="volunteers_no_enabled" 
+			
+			type="checkbox"
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_NO_ENABLED"
+			default="0"
+			onchange="jQuery('#volunteers_no_elm_wrapper').toggleClass('visibility-hidden');"
+        />
+
+		<field name="volunteers_no" 
+			
+			type="integer"
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_NO"
+			default=""
+			first="1"
+			last="15"
+			step="1"
+        />
+       
+		<field name="video" 
+			
+			type="url"
+            class="uk-width-1-1"   
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VIDEO"
+			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_VIDEO"
+			default=""
+        />
+
+	</fields>
+	
+</form>

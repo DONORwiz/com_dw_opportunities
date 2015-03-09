@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="title" type="text"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_TITLE"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_TITLE" 
+                
+                
+                
+            menu_published="0"
+            filter="string"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="alias" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_ALIAS"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_ALIAS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="created_by" type="createdby" default="" 
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_CREATED_BY"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_CREATED_BY"  /> 
+
+ 
+		<field name="filter_created_by" type="user" onchange="this.form.submit();" /> 
+
+       <field name="created" type="timecreated" default="" 
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_CREATED"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_CREATED"  /> 
+
+       <field name="modified" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_MODIFIED"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_MODIFIED" 
+        filter="safehtml" /> 
+
+       <field name="modified_by" type="createdby" default="" 
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_MODIFIED_BY"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_MODIFIED_BY"  /> 
+
+       <field name="featured" type="radio" buttons="true"
+                                                class="btn-group btn-group-yesno" default="1"
+        
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_FEATURED"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_FEATURED" ><option value="1">COM_DW_OPPORTUNITIES_OPPORTUNITIES_FEATURED_OPTION_ON</option><option value="0">COM_DW_OPPORTUNITIES_OPPORTUNITIES_FEATURED_OPTION_OFF</option></field> 
+
+       <field name="featured" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_FEATURED"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_FEATURED" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="publish_up" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_PUBLISH_UP"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_PUBLISH_UP" 
+        filter="safehtml" /> 
+
+       <field name="publish_down" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_PUBLISH_DOWN"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_PUBLISH_DOWN" 
+        filter="safehtml" /> 
+
+       <field name="hits" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_HITS"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_HITS" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="language" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_LANGUAGE"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_LANGUAGE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="priority" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_PRIORITY"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_PRIORITY" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="category" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_CATEGORY"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_CATEGORY" 
+                
+                
+                
+            menu_published="0"
+            filter="raw"
+            multiple="false"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="virtual">COM_DW_OPPORTUNITIES_VIRTUAL</option>
+                <option value="local">COM_DW_OPPORTUNITIES_LOCAL</option>
+        </field> 
+
+       <field name="causearea" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_CAUSEAREA"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_CAUSEAREA" 
+                
+                
+                
+            menu_published="0"
+            filter="raw"
+            multiple="false"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="FIELD_OBJECTIVE_NONE">FIELD_OBJECTIVE_NONE</option>
+        </field> 
+
+ 
+		<field name="filter_causearea" type="list" onchange="this.form.submit();">
+			<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_FILTER</option>
+			<option value="FIELD_OBJECTIVE_NONE">FIELD_OBJECTIVE_NONE</option>
+		</field> 
+
+       <field name="skills" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_SKILLS"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_SKILLS" 
+                
+                
+                
+            multiple="true"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="FIELD_SKILLS_NONE">FIELD_SKILLS_NONE</option>
+        </field> 
+
+ 
+		<field name="filter_skills" type="list" onchange="this.form.submit();">
+			<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_FILTER</option>
+			<option value="FIELD_SKILLS_NONE">FIELD_SKILLS_NONE</option>
+		</field> 
+
+       <field name="age" type="list"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_AGE"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_AGE" 
+                
+                
+                
+            menu_published="0"
+            filter="raw"
+            multiple="false"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="kids">Kids</option>
+                <option value="teens">Teens</option>
+                <option value="adults">Adults</option>
+                <option value="mature">Mature</option>
+        </field> 
+
+ 
+		<field name="filter_age" type="list" onchange="this.form.submit();">
+			<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_FILTER</option>
+			<option value="KIDS">Kids</option>
+			<option value="TEENS">Teens</option>
+			<option value="ADULTS">Adults</option>
+			<option value="MATURE">Mature</option>
+		</field> 
+
+       <field name="image" type="media"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_IMAGE"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_IMAGE" 
+                
+                
+                
+            directory="volunteering_opportunities" /> 
+
+       <field name="description" type="textarea"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_DESCRIPTION"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_DESCRIPTION" 
+                
+                
+                
+            menu_published="0"
+            cols="100"
+            rows="8"
+            filter="safehtml"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="address" type="textarea"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_ADDRESS"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_ADDRESS" 
+                
+                
+                
+            cols="100"
+            rows="8"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="lat" type="text"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_LAT"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_LAT" 
+                
+                
+                 /> 
+
+       <field name="lng" type="text"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_LNG"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_LNG" 
+                
+                
+                 /> 
+
+       <field name="date_start" type="calendar"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_DATE_START"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_DATE_START" 
+                
+                
+                
+            menu_published="0"
+            filter="raw"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="date_end" type="calendar"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_DATE_END"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_DATE_END" 
+                
+                
+                
+            menu_published="0"
+            filter="raw"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="time_start" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_TIME_START"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_TIME_START" 
+         default="00:00:00" 
+        
+        
+        filter="safehtml" /> 
+
+       <field name="time_end" type="text" size="40" class="inputbox"
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_TIME_END"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_TIME_END" 
+         default="00:00:00" 
+        
+        
+        filter="safehtml" /> 
+
+       <field name="parameters" type="textarea"
+                
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_PARAMETERS"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_PARAMETERS" 
+                
+                
+                
+            cols="100"
+            rows="8"
+            option_on="Yes"
+            option_off="Yes" /> 
+
+       <field name="images" type="editor" buttons="true"
+        class="inputbox"
+        filter="safehtml"
+        
+        
+        
+        
+            label="COM_DW_OPPORTUNITIES_FORM_LBL_OPPORTUNITY_IMAGES"
+            description="COM_DW_OPPORTUNITIES_FORM_DESC_OPPORTUNITY_IMAGES"  /> 
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+        <option value="2">JARCHIVED</option>
+        <option value="-2">JTRASHED</option>
+    </field> 
+
+                        <field name="checked_out" type="hidden" filter="unset" />
+        <field name="checked_out_time" type="hidden" filter="unset" />
+
+	</fieldset>
+
+</form>

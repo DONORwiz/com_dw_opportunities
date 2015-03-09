@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_DW_OPPORTUNITIES_TITLE_FORM_VIEW_DWOPPORTUNITY" option="View">
+        <message>
+                        <![CDATA[COM_DW_OPPORTUNITIES_TITLE_FORM_VIEW_OPPORTUNITY_DESC]]>
+        </message>
+    </layout>
+</metadata>

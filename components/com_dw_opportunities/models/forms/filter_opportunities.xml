@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_DW_OPPORTUNITIES_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        
+		<field name="causearea" type="list" onchange="this.form.submit();">
+		<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_FILTER</option>
+		<option value="FIELD_OBJECTIVE_NONE">COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_FIELD_OBJECTIVE_NONE</option>
+		</field> 
+
+ 
+		<field name="skills" type="list" onchange="this.form.submit();">
+		<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_FILTER</option>
+		<option value="FIELD_SKILLS_NONE">COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_FIELD_SKILLS_NONE</option>
+		</field> 
+
+ 
+		<field name="age" type="list" onchange="this.form.submit();">
+		<option value="">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_FILTER</option>
+		<option value="kids">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_KIDS</option>
+		<option value="teens">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_TEENS</option>
+		<option value="adults">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_ADULTS</option>
+		<option value="mature">COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_MATURE</option>
+		</field>
+
+    </fields>
+</form>
