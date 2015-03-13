@@ -45,12 +45,10 @@ class Dw_opportunitiesViewDwopportunityform extends JViewLegacy {
 		//Check if item is Trashed
 		if ( $this->item->state=='-2' ){
 			
-			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=volunteers', false));
+			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunities', false));
 		}
 			
-
-		
-		
+	
 		//Check permissions to create
 		if( !$this -> item -> id )
 		{
@@ -81,17 +79,14 @@ class Dw_opportunitiesViewDwopportunityform extends JViewLegacy {
 		}
 		
 		//Store this item id in user session, in order to prevent editing another item id
-		JFactory::getApplication()->setUserState('com_dw_opportunities.wizard.opportunity.id', $this -> item -> id );
+		//JFactory::getApplication()->setUserState('com_dw_opportunities.form.id.'.$this -> item -> id , $this -> item );
+		$formSession = JFactory::getApplication()->setUserState('com_dw_opportunities.form.item', $this->item );
+
 		
 		//Set item defaults
-		//State
-		if(!$this->item->state)
-			$this->item->state=0;
-			
-		//Category
-		if(!$this->item->category)
-			$this->item->category = 'COM_DW_OPPORTUNITIES_VIRTUAL';
 
+		
+			
 		//Volunteers No Enabled
 		if( !isset($this->item->parameters['volunteers_no_enabled']))
 			$this->item->parameters['volunteers_no_enabled']='0';

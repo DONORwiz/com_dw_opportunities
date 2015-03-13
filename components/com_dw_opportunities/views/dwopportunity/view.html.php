@@ -25,45 +25,66 @@ class Dw_opportunitiesViewDwOpportunity extends JViewLegacy {
 
         $this->state = $this->get('State');
         $this->item = $this->get('Data');
+        $this->item->responses = null;
+		
+		$canEdit = JFactory::getUser()->authorise('core.edit', 'com_dw_opportunities');
+		if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_dw_opportunities')) {
+			$canEdit = JFactory::getUser()->id == $this->item->created_by;
+		}
+		
+		$canCreateResponse = JFactory::getUser()->authorise('core.create', 'com_dw_opportunities_responses');
+
+
+		if ( $this->_layout == 'volunteers' )
+		{
+			if ( !$canEdit )
+			{
+				JError::raiseError( 404, '' );
+			}
+			
+			$this->item->responses = $this->_getOpportunityResponses( $this->item->id );
+			$this->item->responsesCount = $this->_getOpportunityResponsesCount($this->item->id);
+		
+		}
+		
+		if( $canCreateResponse )
+		{
+			$this->item->responses = $this->_getOpportunityResponses( $this->item->id );
+		}
 		
 		if ( $this->_showItem() == false )
 			JError::raiseError( 404, '' );
 		
         $this->params = $app->getParams('com_dw_opportunities');
-        
-		$this->item->responses = $this->_getOpportunityResponses( $this->item->id );
 
-		$this->item->responsesCount = $this->_getOpportunityResponsesCount($this->item->id);
-
-		$this->item-> showLoginButton = $this->_showLoginButton();
-		
 		$this->item-> showResponseWizard = $this->_showResponseWizard( $this->item->id );
 		
-		$app ->setUserState('com_dw_opportunities_responses.showResponseWizard.'.$this->item->id, $this->item-> showResponseWizard);
-		
-		
-		if (!empty($this->item)) {
-            
-			$this->form		= $this->get('Form');
-        
-		}
 
+		
+		// if (!empty($this->item)) {
+            
+			// $this->form	= $this->get('Form');
+        
+		// }
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
         }
-
-        if ($this->_layout == 'edit') {
-
-            $authorised = $user->authorise('core.create', 'com_dw_opportunities');
-
-            if ($authorised !== true) {
-                throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
-            }
-        }
-
+		
+		JFactory::getApplication()->setUserState('com_dw_opportunities.opportunity.id'.$this->item->id , $this->item);
+		
         $this->_prepareDocument();
+		
+		//var_dump($opportunityUserState);
+
+        parent::display($tpl);
+    }
+
+    /**
+     * Prepares the document
+     */
+    protected function _prepareDocument() {
 		
 		$app = JFactory::getApplication();
 
@@ -73,17 +94,7 @@ class Dw_opportunitiesViewDwOpportunity extends JViewLegacy {
 		//Open graph
 		$this->document->setMetadata('og:title', $this -> item -> title);
 
-		$app->setUserState('com_dw_opportunities.dwopportunity.session', $this->item);
-
-        parent::display($tpl);
-    }
-
-    /**
-     * Prepares the document
-     */
-    protected function _prepareDocument() {
-
-    }
+	}
 	
 	protected function _getOpportunityResponsesCount($opportunity_id){
 		
@@ -111,26 +122,24 @@ class Dw_opportunitiesViewDwOpportunity extends JViewLegacy {
 	
 	}
 	
-	protected function _showLoginButton(){
-		
-		if(JFactory::getUser()->id == 0)
-			return true;
-		
-	}
+
 	
 	protected function _showResponseWizard( $opportunity_id ){
 		
 		//Check if user can create response item-----------------------------------------
 		$canCreateResponse = JFactory::getUser()->authorise('core.create', 'com_dw_opportunities_responses');
 		
-		//Check the user has already created a response for this opportunity_id - ONLY 1 allowed - yesinternet
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
-		$opportunitiesresponsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));        
-		$opportunityresponses = $opportunitiesresponsesModel -> getItemsByVolunteer( JFactory::getUser()->id , $opportunity_id );
+		if( $canCreateResponse )
+		{
+			//Check the user has already created a response for this opportunity_id - ONLY 1 allowed - yesinternet
+			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
+			$opportunitiesresponsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));        
+			$opportunityresponses = $opportunitiesresponsesModel -> getItemsByVolunteer( JFactory::getUser()->id , $opportunity_id );
 
-		//Chech if user has already created a response
-		if( $opportunityresponses )
-			$canCreateResponse = false;
+			//Check if user has already created a response
+			if( $opportunityresponses )
+				$canCreateResponse = false;
+		}
 		
 		return $canCreateResponse;
 		

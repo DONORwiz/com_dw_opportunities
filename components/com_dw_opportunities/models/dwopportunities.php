@@ -183,14 +183,14 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		$list = $app->getUserState($this->context . '.list');
 
 		if (empty($list['ordering']))
-{
-	$list['ordering'] = 'ordering';
-}
+		{
+			$list['ordering'] = 'created';
+		}
 
-if (empty($list['direction']))
-{
-	$list['direction'] = 'asc';
-}
+		if (empty($list['direction']))
+		{
+			$list['direction'] = 'desc';
+		}
 
 		$this->setState('list.ordering', $list['ordering']);
 		$this->setState('list.direction', $list['direction']);
@@ -352,6 +352,7 @@ if (empty($list['direction']))
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+		
 		if ($orderCol && $orderDirn)
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
@@ -363,24 +364,26 @@ if (empty($list['direction']))
 	public function getItems()
 	{
 		$items = parent::getItems();
+		
 		foreach($items as $item){
 	
-					$item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . strtoupper($item->category));
-					$item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . strtoupper($item->causearea));
+			//$item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . strtoupper($item->category));
+			//$item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . strtoupper($item->causearea));
 
-				// Get the title of every option selected.
+			// Get the title of every option selected.
 
-				//$options = json_decode($item->skills);
+			//$options = json_decode($item->skills);
 
-				//$options_text = array();
+			//$options_text = array();
 
-				//foreach($options as $option){
-						//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
+			//foreach($options as $option){
+				//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
 
-				//}
-					//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
-					$item->age = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_' . strtoupper($item->age));
-}
+			//}
+			//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
+			$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.(int) $item->id);
+		
+		}
 
 		return $items;
 	}

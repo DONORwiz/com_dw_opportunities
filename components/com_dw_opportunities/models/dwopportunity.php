@@ -88,23 +88,26 @@ class Dw_opportunitiesModelDwOpportunity extends JModelItem {
 		if ( isset($this->_item->modified_by) ) {
 			$this->_item->modified_by_name = JFactory::getUser($this->_item->modified_by)->name;
 		}
-					$this->_item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . $this->_item->category);
-					$this->_item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . $this->_item->causearea);
+		//$this->_item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . $this->_item->category);
+		//$this->_item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . $this->_item->causearea);
 
-				// Get the title of every option selected.
+		// Get the title of every option selected.
 
-				// $options = json_decode($this->_item->skills);
+		// $options = json_decode($this->_item->skills);
 
-				// $options_text = array();
+		// $options_text = array();
 
-				// foreach($options as $option){
-						// $options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . $option);
+		// foreach($options as $option){
+			// $options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . $option);
 
-				// }
-					// $this->_item->skills = !empty($options_text) ? implode(',', $options_text) : $this->_item->skills;
-					$this->_item->age = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_' . $this->_item->age);
-
-        return $this->_item;
+		// }
+		// $this->_item->skills = !empty($options_text) ? implode(',', $options_text) : $this->_item->skills;
+		//$this->_item->age = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_' . $this->_item->age);
+		//var_dump($this->_item->id);
+		$this->_item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.$this->_item->id );
+		$this->_item->parameters = json_decode($this->_item->parameters);
+        
+		return $this->_item;
     }
 
     public function getTable($type = 'Opportunity', $prefix = 'Dw_opportunitiesTable', $config = array()) {

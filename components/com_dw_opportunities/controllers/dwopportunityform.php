@@ -21,28 +21,22 @@ class Dw_opportunitiesControllerDwOpportunityForm extends Dw_opportunitiesContro
 		
 		// Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-		
-        // Get the user data.
-		$jinput = JFactory::getApplication()->input;
-        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-		
-		//If post data empty, die
-		if(empty($data)) jexit(JText::_('EMPTY_POST_DATA'));
-        
+
 		// Initialise variables.
         $app = JFactory::getApplication();
-        $model = $this->getModel('DwOpportunityForm', 'Dw_opportunitiesModel');		
+        $model = $this->getModel('DwOpportunityForm', 'Dw_opportunitiesModel');	
 
+        // Get the user data.
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		
         // Validate the posted data.
         $form = $model->getForm();
         
-		if (!$form) {		
-			
+		if (!$form)
+		{		
 			try
 			{
-				$error = $model->getError(); //JForm::getInstance could not load file
-				$app->enqueueMessage( $error );
-				echo new JResponseJson( '' , $error , true );
+				echo new JResponseJson( '' , $model->getError() , true ); //JForm::getInstance could not load file
 			}
 			catch(Exception $e)
 			{
@@ -50,33 +44,17 @@ class Dw_opportunitiesControllerDwOpportunityForm extends Dw_opportunitiesContro
 			}
 		
 			jexit();
-
 		}
 		
         // Validate the posted data.
         $data = $model->validate($form, $data);
 
         // Check for errors.
-        if ($data === false) {
-            
-			// Set the validation error
-			$error = 'JForm::could not validate data'; //JForm::getInstance could not load file
-			
-			// Get the validation messages.
-            $errors = $model->getErrors();
-
-            // Push up to three validation messages out to the user.
-            for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-                if ($errors[$i] instanceof Exception) {
-                    $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-                } else {
-                    $app->enqueueMessage($errors[$i], 'warning');
-                }
-            }
-
-			try
+        if ($data === false) 
+		{
+        	try
 			{
-				echo new JResponseJson( '' , $error , true );
+				echo new JResponseJson( '' , $model->getErrors() , true );
 			}
 			catch(Exception $e)
 			{
@@ -91,13 +69,11 @@ class Dw_opportunitiesControllerDwOpportunityForm extends Dw_opportunitiesContro
         $return = $model->save($data);
 
         // Check for errors.
-        if ($return === false) {
-		
+        if ($return === false) 
+		{
 			try
 			{
-				$error = $model->getError(); //JForm::could not save data
-				$app->enqueueMessage( $error );
-				echo new JResponseJson( '' , $error , true );
+				echo new JResponseJson( '' , $model->getError() , true );
 			}
 			catch(Exception $e)
 			{
@@ -108,13 +84,6 @@ class Dw_opportunitiesControllerDwOpportunityForm extends Dw_opportunitiesContro
 			
         }
 
-        // Check in the profile.
-        if ($return) {
-            $model->checkin($return);
-        }
-
-        // Clear the profile id from the session.
-		
 		try
 		{
 			echo new JResponseJson( $return );
