@@ -12,6 +12,10 @@ if( JFactory::getApplication()->input->get('dashboard','','string') == 'true')
 	$descrLength = 0;
 }
 
+$app = JFactory::getApplication();
+$jinput = $app->input;
+$dashboard = ( $jinput->get('dashboard', '', 'string'=='true') ) ? true : null ;
+
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 
 ?>
@@ -24,7 +28,7 @@ include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 			<?php echo JLayoutHelper::render( 'infocard' , array( 'created_by_id' => $this->escape($item->created_by) , 'item' => $item )  , JPATH_ROOT .'/components/com_dw_opportunities/layouts/misc' , null ); ?>
 			
 			<div class="uk-width-1-1 uk-text-center uk-margin-small-top">
-				<img style="display:none;" onLoad="this.style.display='inline-block';" src="<?php echo Juri::base();?>media/com_donorwiz/images/mapicons/<?php echo $item->causearea;?>.png">
+				<img style="display:none;" onLoad="this.style.display='inline-block';" src="<?php echo Juri::base();?>media/com_donorwiz/images/mapicons/<?php echo $item->causearea;?>.png" title="<?php echo JText::_($item->causearea); ?>" data-uk-tooltip>
 			</div>
 			
 			<?php echo JLayoutHelper::render( 'opportunity' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/acl' , null ); ?>
@@ -32,8 +36,15 @@ include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 
 		<div class="uk-width-large-8-10">
 			
-			<a href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.(int) $item->id); ?>">
-				<h2 class="uk-margin-remove"><?php echo $this->escape($item->title); ?> </h2>
+			<a <?php if ($dashboard) echo 'target="_blank"';?> href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.(int) $item->id); ?>">
+
+				<h2 class="uk-margin-remove">
+				<?php echo $this->escape($item->title); ?> 
+				<?php if ($dashboard):?>
+				<i class="uk-icon-external-link"></i>
+				<?php endif;?>
+				</h2>
+
 			</a>
 			
 			<?php echo JLayoutHelper::render( 'opportunity' , array( 'created_by_id' => $this->escape($item->created_by) , 'item' => $item )  , JPATH_ROOT .'/components/com_dw_opportunities/layouts/meta' , null ); ?>

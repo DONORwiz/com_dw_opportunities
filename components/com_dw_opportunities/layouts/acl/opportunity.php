@@ -27,7 +27,7 @@ if (!$canEdit && $user->authorise('core.edit.own', 'com_dw_opportunities'))
 	<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_EDIT'); ?>
 	</a>
 
-	<a class="uk-button uk-button-mini uk-button-success" href="<?php echo JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunity&Itemid=298&id='.(int) $item->id); ?>" >
+	<a class="uk-button uk-button-mini uk-button-success" href="<?php echo JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunityvolunteers&Itemid=298&id='.(int) $item->id); ?>" >
 	<i class="uk-icon-users"></i>
 	<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_VOLUNTEERS'); ?>
 	</a>

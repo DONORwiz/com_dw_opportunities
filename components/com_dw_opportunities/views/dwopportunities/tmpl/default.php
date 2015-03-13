@@ -12,7 +12,6 @@ $beneficiaries = $this->beneficiaries;
 $causeareas = $this->causeareas;
 $resetlink = $this->resetlink;
 
-
 ?>
 
 <div class="uk-grid">

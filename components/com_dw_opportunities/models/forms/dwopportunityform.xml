@@ -123,13 +123,16 @@
 		<field name="image" type="donorwizupload"
 			
 			label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_IMAGE"
-			message_file_not_allowed="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_IMAGE_FILE_NOT_ALLOWED" 
-			message_file_upload_error="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_IMAGE_FILE_UPLOAD_ERROR" 
+			message_file_not_allowed="COM_DONORWIZ_FIELD_DONORWIZUPLOAD_FILE_TYPE_NOT_ALLOWED" 
 			actionoption="com_donorwiz"
 			uploadtask="s3.upload"
 			deletetask="s3.delete"
-			allow="*.(jpg|gif|png)"
-			objecttype="volunteering_opportunity"
+			allow="jpeg|jpg|gif|png|image/jpeg|image/jpg|image/png|image/gif"
+			size="512"
+			sizetext="512 KB"
+			formpath="/components/com_dw_opportunities/models/forms/dwopportunityform.xml"
+			objecttype="com_dw_opportunities"
+			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_IMAGE"
 		
 		/>
 		
@@ -206,6 +209,7 @@
             class="uk-width-1-1"   
             label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VIDEO"
 			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TOOLTIP_VIDEO"
+			hint="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_ΗΙΝΤ_VIDEO"
 			default=""
         />
 

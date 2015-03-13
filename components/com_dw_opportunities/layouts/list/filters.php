@@ -32,7 +32,7 @@ $donorwizUrl = new DonorwizUrl()
 				</a>
 		<?php endif;?>
 		
-		<select class="uk-form-small" onchange="if (this.value) window.location.href=this.value">
+		<select class="uk-form-small uk-hidden" onchange="if (this.value) window.location.href=this.value">
 
 			<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => '' ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_SORT_BY_DATE');?></option>
 			<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => '' ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_SORT_BY_EVENT');?></option>
