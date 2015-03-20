@@ -72,6 +72,8 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 			<?php echo JLayoutHelper::render(
 				'popup-button', 
 				array (
+					'isAjax' => true,
+					'buttonLink' => JRoute::_('index.php?option=com_donorwiz&view=login&Itemid=314&return='.base64_encode(JFactory::getURI()->toString()).'&'. JSession::getFormToken() .'=1'),
 					'buttonText' => JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_I_WANT_TO_HELP'),
 					'buttonIcon' => 'uk-icon-smile-o uk-icon-small uk-margin-small-right',
 					'buttonType' => 'uk-button uk-button-primary uk-button-large uk-width-1-1',

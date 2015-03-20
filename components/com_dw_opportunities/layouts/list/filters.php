@@ -9,9 +9,16 @@ $resetlink = $displayData['resetlink'];
 $app = JFactory::getApplication();
 $jinput = $app->input;
 
+$jinputFilter = $app->input->get('filter','','array');
+
+$jinputCategory = ( isset ( $jinputFilter['category'] ) ) ? $jinputFilter['category'] : '' ;
+$jinputCreatedBy = ( isset ( $jinputFilter['created_by'] ) ) ? $jinputFilter['created_by'] : '' ;
+$jinputCauseArea = ( isset ( $jinputFilter['causearea'] ) ) ? $jinputFilter['causearea'] : '' ;
+
 $dashboard = ( $jinput->get('dashboard', '', 'string'=='true') ) ? true : null ;
 
-$donorwizUrl = new DonorwizUrl()
+$donorwizUrl = new DonorwizUrl();
+
 ?>
 
 <div class="uk-width-1-1 uk-margin-large-bottom" data-uk-sticky="{top:76}" style="background:#fff;">
@@ -19,14 +26,14 @@ $donorwizUrl = new DonorwizUrl()
 	<div class="uk-width-1-1 uk-text-right uk-margin-small-top uk-form">
 		
 		<?php if( $resetlink == true && !$dashboard ):?>
-				<a class="uk-button uk-button-mini uk-button-link" href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunities'); ?>">
+				<a class="uk-button uk-button-mini uk-button-link" href="<?php echo JRoute::_( $donorwizUrl -> getCurrentUrlWithNewParams( array ( ) ) ); ?>">
 					<i class="uk-icon-remove uk-icon-small"></i>
 					<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_RESET');?>
 				</a>
 		<?php endif;?>
 
 		<?php if( $dashboard ):?>
-				<a class="uk-button uk-button-mini uk-button-link" href="<?php echo JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=volunteering_opportunities'); ?>">
+				<a class="uk-button uk-button-mini uk-button-link" href="<?php echo JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunities'); ?>">
 					<i class="uk-icon-remove uk-icon-small"></i>
 					<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_RESET');?>
 				</a>
@@ -59,18 +66,30 @@ $donorwizUrl = new DonorwizUrl()
 				
 				<div class="uk-width-medium-1-2">
 					
-						
 						<?php if(!$dashboard):?>
 						
 						<select class="uk-form-large uk-width-1-1" onchange="if (this.value) window.location.href=this.value" <?php if ( !count( $beneficiaries ) ) echo 'disabled="true"'; ?> >
 
-							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => '' ) ) ;?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION');?></option>
+							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'created_by' => '' ) ) ) ;?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION');?></option>
 							
 							<?php if ( count( $beneficiaries ) ) : ?>
 								
 								<?php foreach ( $beneficiaries as $key => $value) : ?>
 
-									<option <?php if( $jinput->get('created_by', '', 'string') != $value['user_id'] ) { echo "value='".$donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => $value['user_id'] ) )."' ";}  ?> <?php if( $jinput->get('created_by', '', 'string') == $value['user_id'] ) echo 'selected="selected"'?> ><?php echo $value['name'];?></option>
+									<option 
+										
+										<?php if( $jinputCreatedBy != $value['user_id'] ) :?>
+											value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams(  array( 'filter' => array ( 'created_by' => $value['user_id'] ) ) );?>"
+										<?php endif;?>
+										
+										<?php if( $jinputCreatedBy == $value['user_id'] ) :?>
+											selected="selected"
+										<?php endif;?>
+									
+									>
+										<?php echo $value['name'];?>
+									
+									</option>
 
 								<?php endforeach;?>
 							
@@ -87,15 +106,20 @@ $donorwizUrl = new DonorwizUrl()
 					
 						<select class="uk-form-large uk-width-1-1" onchange="if (this.value) window.location.href=this.value">
 						
-							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'causearea' => '' ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_CAUSE_AREA');?></option>
+							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'causearea' => '' ) ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_CAUSE_AREA');?></option>
 							
 							<?php if ( $causeareas && count( $causeareas ) > 0 ) : ?>
 								
 								<?php foreach ($causeareas as $key => $causearea) :  ?>
 
 									<option 
-									<?php if( $jinput->get('causearea', '', 'string') != $causearea) { echo "value='".$donorwizUrl -> getCurrentUrlWithNewParams( array( 'causearea' => $causearea ) )."' "; } ?> 
-									<?php if( $jinput->get('causearea', '', 'string') == $causearea ) echo 'selected="selected"'?> >
+									<?php if( $jinputCauseArea != $causearea) :?>
+										value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'causearea' => $causearea ) ) );?>" 
+									<?php endif; ?>
+									<?php if( $jinputCauseArea == $causearea ) :?>
+										selected="selected"
+									<?php endif; ?>
+									>
 										<?php echo JText::_($causearea);?>
 									</option>
 									
@@ -136,7 +160,12 @@ $donorwizUrl = new DonorwizUrl()
 			
 		<div class="uk-width-medium-1-2">
 		
-			<a class="uk-button uk-button-large uk-width-1-1 truncate<?php if( $jinput->get('category', '', 'string') == 'local') {echo 'uk-active uk-button-success';} ?>" href="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'category' => 'local' ) ); ?>" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_LOCAL_TOOLTIP');?>">
+			<a class="uk-button uk-button-large uk-width-1-1 truncate
+				<?php if( $jinputCategory == 'local') :?>
+					uk-active uk-button-success
+				<?php endif;?>
+				" 
+				href="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'category' => 'local' ) ) ); ?>" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_LOCAL_TOOLTIP');?>">
 				<i class="uk-icon-map-marker uk-icon-small"></i>
 				<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_LOCAL');?>
 			</a>
@@ -145,7 +174,7 @@ $donorwizUrl = new DonorwizUrl()
 			
 		<div class="uk-width-medium-1-2">
 			
-			<a class="uk-button uk-button-large uk-width-1-1 truncate<?php if( $jinput->get('category', '', 'string') == 'virtual') {echo 'uk-active uk-button-success';} ?>" href="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'category' => 'virtual' ) ); ?>" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_VIRTUAL_TOOLTIP');?>">
+			<a class="uk-button uk-button-large uk-width-1-1 truncate<?php if( $jinputCategory == 'virtual') {echo 'uk-active uk-button-success';} ?>" href="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'category' => 'virtual' ) ) ); ?>" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_VIRTUAL_TOOLTIP');?>">
 				<i class="uk-icon-laptop uk-icon-small"></i>
 				<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_VIRTUAL');?>
 			</a>

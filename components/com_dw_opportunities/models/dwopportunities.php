@@ -88,7 +88,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		$this->setState('list.start', $limitstart);
 
 		// Set filters from GET request - yesinternet
-		$app->setUserState( $this->context . '.filter', JRequest::get());
+		//$app->setUserState( $this->context . '.filter', JRequest::get());
 		
 		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
@@ -232,9 +232,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		//Responders id - yesinternet
 		$filter_responders_id = $this->state->get("filter.responders_id");
 	
-		if ($filter_responders_id) {
+		if ($filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
-			$query->join('LEFT', '#__volunteers_responses AS b ON a.id = b.opportunity_id');
+			$query->join('INNER', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
 		
 		}
 
@@ -322,7 +322,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		}
 		
 		//State - yesinternet
-		if( JFactory::getApplication()->input->get('dashboard','','string') == 'true' || $this->state->get("list.dashboard") )
+		if( JFactory::getApplication()->input->get('dashboard','','string') == 'true' )
 		{
 			$query->where("(a.state = '1' OR a.state = '0')");
 		}
@@ -334,7 +334,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		//responders - yesinternet
 		$filter_responders_id = $this->state->get("filter.responders_id");
 	
-		if ($filter_responders_id) {
+		if ( $filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
 			$query->where("b.created_by = '".$filter_responders_id."'");
 		}
