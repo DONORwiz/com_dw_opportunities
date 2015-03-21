@@ -29,6 +29,45 @@ class Dw_opportunitiesControllerDwOpportunityForm extends Dw_opportunitiesContro
         // Get the user data.
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
 		
+		// Check if user can edit or create the item ---------------------------------------------------------------------------------------------
+		$id = ( ( $data['id'] == 0 ) || !isset ( $data['id'] ) ) ? null : (int)$data['id'];
+        $user = JFactory::getUser();
+
+        if( $id ) 
+		{
+        	//Check the user can edit this item
+            $authorised = $user->authorise('core.edit', 'com_dw_opportunities');
+			
+			if(!$authorised && $user->authorise('core.edit.own', 'com_dw_opportunities'))
+			{
+				//Check the owner from the model
+				$itemData = $model -> getData($id);
+				$itemOwner = ( isset ( $itemData -> created_by ) ) ? $itemData -> created_by : null ;
+				$authorised = $user -> id == $itemOwner ; 
+			}
+		
+        } 
+		else 
+		{
+            //Check the user can create new item
+            $authorised = $user->authorise('core.create', 'com_dw_opportunities');
+        }		
+
+		if (!$authorised)
+		{		
+			try
+			{
+				echo new JResponseJson( '' , JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PERMISSION_DENIED') , true );
+			}
+			catch(Exception $e)
+			{
+				echo new JResponseJson($e);
+			}
+		
+			jexit();
+		}
+		// ------------------------------------------------------------------------------------------------------------------------------
+		
         // Validate the posted data.
         $form = $model->getForm();
         
