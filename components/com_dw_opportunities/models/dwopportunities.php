@@ -88,7 +88,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		$this->setState('list.start', $limitstart);
 
 		// Set filters from GET request - yesinternet
-		$app->setUserState( $this->context . '.filter', JRequest::get());
+		//$app->setUserState( $this->context . '.filter', JRequest::get());
 		
 		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
@@ -232,9 +232,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		//Responders id - yesinternet
 		$filter_responders_id = $this->state->get("filter.responders_id");
 	
-		if ($filter_responders_id) {
+		if ($filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
-			$query->join('LEFT', '#__volunteers_responses AS b ON a.id = b.opportunity_id');
+			$query->join('INNER', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
 		
 		}
 
@@ -322,7 +322,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		}
 		
 		//State - yesinternet
-		if( JFactory::getApplication()->input->get('dashboard','','string') == 'true' || $this->state->get("list.dashboard") )
+		if( JFactory::getApplication()->input->get('dashboard','','string') == 'true' )
 		{
 			$query->where("(a.state = '1' OR a.state = '0')");
 		}
@@ -334,7 +334,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		//responders - yesinternet
 		$filter_responders_id = $this->state->get("filter.responders_id");
 	
-		if ($filter_responders_id) {
+		if ( $filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
 			$query->where("b.created_by = '".$filter_responders_id."'");
 		}
@@ -365,24 +365,22 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 	{
 		$items = parent::getItems();
 		
-		foreach($items as $item){
-	
-			//$item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . strtoupper($item->category));
-			//$item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . strtoupper($item->causearea));
-
-			// Get the title of every option selected.
-
-			//$options = json_decode($item->skills);
-
-			//$options_text = array();
-
-			//foreach($options as $option){
-				//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
-
-			//}
-			//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
-			$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.(int) $item->id);
+		if ( is_array( $items ) )
+		{
+			foreach($items as $item){
 		
+				//$item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . strtoupper($item->category));
+				//$item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . strtoupper($item->causearea));
+				// Get the title of every option selected.
+				//$options = json_decode($item->skills);
+				//$options_text = array();
+				//foreach($options as $option){
+					//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
+				//}
+				//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
+				$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.(int) $item->id);
+			
+			}
 		}
 
 		return $items;

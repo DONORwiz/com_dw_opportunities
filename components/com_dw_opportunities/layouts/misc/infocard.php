@@ -20,8 +20,8 @@ $link = CRoute::_('index.php?option=com_community&view=profile&userid='.$created
 
 <div class="uk-text-center" >
 
-	<a href="<?php echo $link; ?>" style="text-decoration:none!important">
-		<img class="uk-thumbnail" src="<?php echo $avatarUrl ; ?>" alt="<?php echo $created_by_name; ?>" title="<?php echo $created_by_name; ?>">
+	<a href="<?php echo $link; ?>" target="_blank" style="text-decoration:none!important" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_VIEW_PROFILE');?>" data-uk-tooltip>
+		<img class="uk-thumbnail uk-border-circle" src="<?php echo $avatarUrl ; ?>" alt="<?php echo $created_by_name; ?>" title="<?php echo $created_by_name; ?>">
 	</a>
 
 </div>

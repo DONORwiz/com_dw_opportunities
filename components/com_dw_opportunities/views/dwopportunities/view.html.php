@@ -19,18 +19,56 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
      * Display the view
      */
     public function display($tpl = null) {
-        $app = JFactory::getApplication();
+        
+		$app = JFactory::getApplication();
 
         $this->state = $this->get('State');
+		
+		$this->jinputFilter = $app->input->get('filter','','array');
+		
+		//Default ordering
+		if( $app->input->get('filter_order','','string')=='' )
+		{
+			$this->state->set('list.ordering','a.created');
+		}
+		
+		//Default ordering
+		if( $app->input->get('filter_order_Dir','','string')=='' )
+		{
+			$this->state->set('list.direction','desc');
+		}
+
+		$jinputFilter = $this->jinputFilter;
+		
+		//Default created_by
+		if(!isset($jinputFilter['created_by']))
+		{
+			$this->state->set('filter.created_by','');
+		}
+		//Default causearea
+		if(!isset($jinputFilter['causearea']))
+		{
+			$this->state->set('filter.causearea','');
+		}		
+
+		//Default category
+		if(!isset($jinputFilter['category']))
+		{
+			$this->state->set('filter.category','');
+		}
+
+		
         $this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
+		
+
         $this->params = $app->getParams('com_dw_opportunities');
         //$this->filterForm = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
+		//$this->activeFilters = $this->get('ActiveFilters');
 		
 		$this->beneficiaries = $this->_getVolunteeringBeneficiaries();
 		$this->causeareas = $this->_getCauseAreas();
-		$this->resetlink = $this->_showResetlink(JFactory::getApplication()->input);
+		$this->resetlink = $this->_showResetlink( JFactory::getApplication()->input );
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
@@ -88,14 +126,22 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 	
 	protected function _showResetlink( $jinput ){
 		
+		$jinputFilter = $jinput->get('filter','','array');
+		
+		$jinputCategory = ( isset ( $jinputFilter['category'] ) ) ? $jinputFilter['category'] : '' ;
+		$jinputCreatedBy = ( isset ( $jinputFilter['created_by'] ) ) ? $jinputFilter['created_by'] : '' ;
+		$jinputCauseArea = ( isset ( $jinputFilter['causearea'] ) ) ? $jinputFilter['causearea'] : '' ;
+
 		$showResetlink = false;
 		
 		if( 
-			$jinput->get('causearea', '', 'string')		!=''	|| 
-			$jinput->get('category', '', 'string')		!=''	|| 
-			$jinput->get('category', '', 'string')		!=''	||
-			$jinput->get('created_by', '', 'string')	!=''	||	
-			$jinput->get('nearby_place', '', 'string')	!=''	
+			$jinputCategory		!='' ||	
+			$jinputCreatedBy		!='' ||	
+			$jinputCauseArea		!='' 
+			// $jinput->get('category', '', 'string')		!=''	|| 
+			// $jinput->get('category', '', 'string')		!=''	||
+			// $jinput->get('created_by', '', 'string')	!=''	||	
+			// $jinput->get('nearby_place', '', 'string')	!=''	
 		)
 		{
 			
