@@ -25,7 +25,7 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
         $this->state = $this->get('State');
 		
 		$this->jinputFilter = $app->input->get('filter','','array');
-		
+
 		//Default ordering
 		if( $app->input->get('filter_order','','string')=='' )
 		{
@@ -57,8 +57,19 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 			$this->state->set('filter.category','');
 		}
 
+		//Default lat
+		if( !isset ( $jinputFilter['lat'] ) )
+		{
+			$this->state->set('filter.lat','0');
+		}
+		//Default lng
+		if( !isset ( $jinputFilter['lng'] ) )
+		{
+			$this->state->set('filter.lng','0');
+		}
 		
-        $this->items = $this->get('Items');
+        $this->items = $this->_getItemsResponses ( $this->get('Items') );
+		
 		$this->pagination = $this->get('Pagination');
 		
 
@@ -72,10 +83,10 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-;
-            throw new Exception(implode("\n", $errors));
+				throw new Exception(implode("\n", $errors));
         }
 
+		
         $this->_prepareDocument();
         parent::display($tpl);
     }
@@ -152,7 +163,29 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 		return $showResetlink;
 		
 	}
+	
+	
+	protected function _getItemsResponses( $items )
+	{
+	
+		if( JFactory::getUser() -> guest )
+		{
+			return $items;
+		}
+		
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
+		
+		foreach ($items as $item) 
+		{
+		
+			$responsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));
+			$item -> responses = $responsesModel -> getItemsByOpportunity( $item -> id  );
+			
+		}
 
+		return $items;
+
+	}
 
     /**
      * Prepares the document

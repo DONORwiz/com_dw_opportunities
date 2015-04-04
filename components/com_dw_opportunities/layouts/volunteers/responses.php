@@ -5,8 +5,13 @@ defined('_JEXEC') or die;
 $items = $displayData['items'];
 
 ?>
-
-<ul class="uk-list list">
+<div id="opportunity_responses_list">
+	
+	<?php if ( count ($items) > 1 ) :?>
+	<?php echo JLayoutHelper::render( 'responsesfilters' , array( ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/volunteers' , null ); ?>	
+	<?php endif;?>
+	
+<ul  class="uk-list list">
 
 	<?php foreach ( $items as $i => $response) : ?>
 
@@ -15,3 +20,5 @@ $items = $displayData['items'];
 	<?php endforeach;?>
 
 </ul>
+
+</div>

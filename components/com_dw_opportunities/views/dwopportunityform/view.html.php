@@ -21,7 +21,7 @@ class Dw_opportunitiesViewDwopportunityform extends JViewLegacy {
      */
     public function display($tpl = null) {
 
-        $app = JFactory::getApplication();
+		$app = JFactory::getApplication();
         
 		$user = JFactory::getUser();
 
@@ -34,59 +34,56 @@ class Dw_opportunitiesViewDwopportunityform extends JViewLegacy {
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));
         }
-        
-		//Check if item exists
-		if( !$this->item )
-		{
-			//JError::raiseError( '500' , JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PERMISSION_DENIED') );
-			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=volunteers', false));
-		}
 
-		//Check if item is Trashed
-		if ( $this->item->state=='-2' ){
-			
-			JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunities', false));
-		}
-			
-	
+		
 		//Check permissions to create
 		if( !$this -> item -> id )
 		{
-			if( !JFactory::getUser()->authorise('core.create', 'com_dw_opportunities') )
+			if( !$user->authorise('core.create', 'com_dw_opportunities') )
 			{
 				JError::raiseError( '500' , JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PERMISSION_DENIED') );
 			}
 
 		}
 		
-	
-		//Check permissions to edit
+
+		
+		//Check if item exists or trashed
+		if( !$this->item || $this->item->state=='-2')
+		{
+			$menuItemID = JFactory::getApplication()->getMenu()->getItems( 'link', 'index.php?option=com_donorwiz&view=dashboard&layout=dwopportunities', true )->id;
+			JFactory::getApplication()->redirect(JRoute::_('index.php?Itemid='.$menuItemID));
+		}
+
+		//Check if user can edit opportunity----------------------------------------
 		if( $this -> item -> id )
 		{
-			$canEdit = JFactory::getUser()->authorise('core.edit', 'com_dw_opportunities');
+			$canEditOpportunity = $user->authorise('core.edit', 'com_dw_opportunities');
 			
-			if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_dw_opportunities'))
+			if (!$canEditOpportunity && $user->authorise('core.edit.own', 'com_dw_opportunities'))
 			{
-				$canEdit = JFactory::getUser()->id == $this->item->created_by;
+				$canEditOpportunity = $user -> id == $this->item->created_by;
 			}
 
-			if( !$canEdit )
+			if( !$canEditOpportunity )
 			{
-				//JError::raiseError( '500' , JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PERMISSION_DENIED') );
-				JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=volunteers', false));
+				$menuItemID = JFactory::getApplication()->getMenu()->getItems( 'link', 'index.php?option=com_donorwiz&view=dashboard&layout=dwopportunities', true )->id;
+				JFactory::getApplication()->redirect(JRoute::_('index.php?Itemid='.$menuItemID));
+
 			}
 			
 		}
+
+
+
 		
 		//Store this item id in user session, in order to prevent editing another item id
-		//JFactory::getApplication()->setUserState('com_dw_opportunities.form.id.'.$this -> item -> id , $this -> item );
+
 		$formSession = JFactory::getApplication()->setUserState('com_dw_opportunities.form.item', $this->item );
 
 		
 		//Set item defaults
 
-		
-			
 		//Volunteers No Enabled
 		if( !isset($this->item->parameters['volunteers_no_enabled']))
 			$this->item->parameters['volunteers_no_enabled']='0';
@@ -125,7 +122,6 @@ class Dw_opportunitiesViewDwopportunityform extends JViewLegacy {
 
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 		
-		JHtml::script(Juri::base() . 'media/com_donorwiz/js/wizard.js');		
 	}
     
 	protected function _prepareDocument() {

@@ -18,13 +18,12 @@ $item = $this -> item ;
 $showMap = (!$dashboard) ? true : null ;
 $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width-1-1' ;
 
-
 ?>
 
 <div id="opportunityitem" class="uk-grid">
-	
+		
 	<?php if($showMap) :?>
-	<div class="uk-width-large-4-10 uk-hidden-medium uk-hidden-small">
+	<div class="uk-width-large-4-10 uk-hidden-medium uk-hidden-small" style="min-height:1px;">
 		<?php echo JLayoutHelper::render('multiple', array ( 'items' => array ( '0' => $item ) , 'widthClass' => 'uk-width-4-10' ) , JPATH_ROOT .'/components/com_donorwiz/layouts/map' , null ); ?>
 	</div>
 	<?php endif;?>
@@ -66,6 +65,7 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 			
 		</div>
 		<?php endif;?>
+		
 
 		<?php if ( JFactory::getUser()->guest ):?>
 		<!-- Login Button ---------------------------------------------------------------------------------->
@@ -108,40 +108,45 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 			?>
 
 		<?php endif; ?>
-
-
+		
 		<p><?php echo $item->description; ?></p>
 
-		<div class="uk-grid uk-margin-top">
+		<div class="uk-grid">
 			
-			<div class="uk-width-1-2">
+			<div class="uk-width-medium-1-2 uk-margin-small-top">
 				<?php echo JLayoutHelper::render( 'category' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/elements' , null ); ?>	
 			</div>
 
-			<div class="uk-width-1-2">
+			<div class="uk-width-medium-1-2 uk-margin-small-top">
 				<?php echo JLayoutHelper::render( 'schedule' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/elements' , null ); ?>	
 			</div>		
 
 		</div>
 		
-		<?php if ( $item -> responses ) :?>
-
-		<?php echo JLayoutHelper::render( 'responses' , array( 'items'=> $item -> responses ['items'] ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/volunteers' , null ); ?>	
+		<?php if ( $item -> myresponse ) :?>
+		
+		<div class="uk-width-1-1 uk-margin-top">
+			<?php echo JLayoutHelper::render( 'item.response' , array( 'response'=> $item -> myresponse ) , JPATH_ROOT .'/components/com_dw_opportunities_responses/layouts' , null ); ?>	
+		</div>
 		
 		<?php endif; ?>
 		
-		<?php if ( JFactory::getUser()-> guest ):?>
-			<div class="uk-width-1-1">
+		<div class="uk-width-1-1">
 				<?php echo JLayoutHelper::render( 'info' , array( 'beneficiary_id' => $item -> created_by ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/beneficiary' , null ); ?>	
-			</div>
-		<?php endif; ?>
+		</div>
+
+		<div class="uk-width-1-1 uk-margin-top">
+			<!-- www.addthis.com -->
+			<div class="addthis_sharing_toolbox"></div>
+		</div>
+		
 		<div class="uk-width-1-1 uk-text-right">
 			<a class="uk-button uk-button-link" href="<?php echo JRoute::_('volunteer'); ?>">
 			<i class="uk-icon-long-arrow-left uk-icon-small"></i>
 			<?php echo JText::_('COM_DW_OPPORTUNITIES_BACK');?>
 			</a>
 		</div>
-		
+			
 	</div>
 
 </div>
