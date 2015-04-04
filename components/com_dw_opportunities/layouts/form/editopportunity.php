@@ -1,15 +1,42 @@
-<?php
+<?php 
 
 defined('_JEXEC') or die;
 
-$item = $this->item;
-$form = $this->form;
+$item = $displayData['opportunity'];
+
+
+$user = JFactory::getUser() ;
+
+
+
+JFactory::getLanguage()->load('com_dw_opportunities');
+
+//Load the Opportunity form
+$form = new JForm( 'com_dw_opportunities.dwopportunityform' , array( 'control' => 'jform', 'load_data' => true ) );
+$form->loadFile( JPATH_ROOT . '/components/com_dw_opportunities/models/forms/dwopportunityform.xml' );
+
+JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities/models', 'Dw_opportunitiesModel');
+$opportunityModel = JModelLegacy::getInstance('DwOpportunity', 'Dw_opportunitiesModel', array('ignore_request' => true));	
+$opportunityData = $opportunityModel->getData( $item->id );	
+$form->bind( $opportunityData );
+
+
+JHtml::_('jquery.framework');
+
+$script = array();
+
+$script[] = 'var waitingModal;';
+$script[] = 'var JText_COM_DONORWIZ_WIZARD_SAVE_FAIL = "'.JText::_('COM_DONORWIZ_WIZARD_SAVE_FAIL').'";';
+$script[] = 'var JText_COM_DONORWIZ_WIZARD_TRASH_CONFIRM = "'.JText::_('COM_DONORWIZ_WIZARD_TRASH_CONFIRM').'";';
+$script[] = 'var JText_COM_DONORWIZ_MODAL_PLEASE_WAIT = "'.JText::_('COM_DONORWIZ_MODAL_PLEASE_WAIT').'";';
+
+JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));	
 
 ?>
 
 <div class="uk-margin-left">
 
-<nav id="opportunity-wizard-toolbar" class="uk-vertical-align uk-margin-small-left uk-margin-small-right uk-panel-bg" style="height:75px;">
+<nav id="opportunity-wizard-toolbar" class="uk-navbar uk-vertical-align uk-margin-small-left uk-margin-small-right" data-uk-sticky="{ media: 480 , animation: 'uk-animation-slide-top'}" style="height:75px;">
 	
 	<div class="uk-vertical-align-middle uk-width-1-1">
 		
@@ -32,10 +59,11 @@ $form = $this->form;
 			</a>
 			<?php endif;?>
 			
-
-			<?php echo JLayoutHelper::render( 'acl.button.trash.opportunity', array ( 'opportunity' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>
-
-			
+			<?php if( !is_null ( $item->state ) ):?>
+			<a class="uk-button uk-button-link uk-text-muted trashed" href="#" title="<?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_TRASH' );?>" data-uk-tooltip>
+				<i class="uk-icon-trash-o uk-icon-small"></i>
+			</a>
+			<?php endif;?>		
 		</div>
 		
 		<!--Cancel-->

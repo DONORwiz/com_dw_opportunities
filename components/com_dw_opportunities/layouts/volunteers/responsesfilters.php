@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 
 ?>
 
+<?php if (  JFactory::getApplication()->input->get('layout', '', 'string') == 'dwopportunityvolunteers' ) :?>
 <div id="opportunityresponsesfilters" class="uk-form">
 
 	<div class="uk-grid uk-grid-small" data-uk-grid-margin>
@@ -66,3 +67,5 @@ jQuery(document).ready(function ()
 });
 
 </script>
+
+<?php endif;?>

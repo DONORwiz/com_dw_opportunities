@@ -18,31 +18,30 @@ $time_start = ( $item_time_start && $item_date_start ) ? JFactory::getDate('0000
 $time_end = ( $item_time_end && $item_date_end ) ? JFactory::getDate('0000-00-00 '.$item -> time_end)->format('H:i') : null ;
 ?>
 
-<div class="uk-text-center">
 
 <?php if ( !$date_start && !$date_end ):?>
-	<i class="uk-icon-smile-o uk-icon-medium"></i>
-	<div><?php echo JText::_('COM_DW_OPPORTUNITIES_SCHEDULE_FLEXIBLE');?></div>
+	<i class="uk-icon-clock-o uk-icon-small"></i>
+	<span><?php echo JText::_('COM_DW_OPPORTUNITIES_SCHEDULE_FLEXIBLE');?></span>
+	
 <?php else: ?>
 
 	
-	<i class="uk-icon-calendar uk-icon-medium"></i> 
+	<i class="uk-icon-calendar uk-icon-small"></i> 
 	<?php if( $date_start ) :?>
-		<div>
+		<span>
 			<?php echo JText::_('COM_DW_OPPORTUNITIES_DATE_FROM_LOWER').' '. $date_start;?>
 			<?php if( $time_start ) :?>
 			<span class="time start"><?php echo JText::_('COM_DW_OPPORTUNITIES_TIME_LOWER').' '. $time_start;?></span>
 			<?php endif;?>
-		</div>
+		</span>
 	<?php endif;?>
 	<?php if( $date_end ) :?>
-		<div>
+		<span>
 			<?php echo JText::_('COM_DW_OPPORTUNITIES_DATE_TO_LOWER').' '. $date_end;?>
 			<?php if( $time_end ) :?>
 			<span class="time start"><?php echo JText::_('COM_DW_OPPORTUNITIES_TIME_LOWER').' '. $time_end;?></span>
 			<?php endif;?>
-		</div>
+		</span>
 	<?php endif;?>
 <?php endif;?>
 
-</div>

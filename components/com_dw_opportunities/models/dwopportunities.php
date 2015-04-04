@@ -86,9 +86,6 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 
 		$limitstart = $app->input->getInt('limitstart', 0);
 		$this->setState('list.start', $limitstart);
-
-		// Set filters from GET request - yesinternet
-		//$app->setUserState( $this->context . '.filter', JRequest::get());
 		
 		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
@@ -163,7 +160,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 				$this->setState('filter.' . $name, $value);
 			}
 		}
-
+		
 		$ordering = $app->input->get('filter_order');
 		if (!empty($ordering))
 		{
@@ -216,57 +213,67 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 				)
 			);
 		
-		
 		$lat = $this->getState('filter.lat');
 		$lng = $this->getState('filter.lng');		
 		
-		if($lat&&$lng)
+		if( $lat && $lng )
 		{
 			//search nearest locations
 			$query->select('( 6371 * acos( cos( radians( '.$lat.' ) ) * cos( radians( a.lat ) ) * cos( radians( a.lng ) - radians( '.$lng.' ) ) + sin( radians( '.$lat.' ) ) * sin( radians( a.lat ) ) ) ) AS distance');
 		}
 
-
 		$query->from('`#__dw_opportunities` AS a');
 
-		//Responders id - yesinternet
-		$filter_responders_id = $this->state->get("filter.responders_id");
+		//donor_id - yesinternet
+		$filter_donor_id = $this->state->get("filter.donor_id");
 	
-		if ($filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
+		if ($filter_donor_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
-			$query->join('INNER', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
+			$query->join('LEFT', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
 		
 		}
 
-		// Join over the users for the checked out user.
-		$query->select('uc.name AS editor');
-		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
+		// // Join over the users for the checked out user.
+		// $query->select('uc.name AS editor');
+		// $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
     
-		// Join over the created by field 'created_by'
-		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
-		// Join over the created by field 'modified_by'
-		$query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
+		// // Join over the created by field 'created_by'
+		// $query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
+		// // Join over the created by field 'modified_by'
+		// $query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
 
+
+		//Filtering state - yesinternet
+		$dashboard = JFactory::getApplication()->input->get('dashboard','','string');
+		$filter_state = $this->state->get("filter.state");
+		$canEditStateOpportunity = JFactory::getUser()->authorise('core.edit.state', 'com_dw_opportunities');
 		
-		if (!JFactory::getUser()->authorise('core.edit.state', 'com_dw_opportunities'))
+		if( $dashboard == 'true' && $canEditStateOpportunity)
 		{
-			$query->where('a.state = 1');
-		}
-
-		// Filter by search in title
-		$search = $this->getState('filter.search');
-		if (!empty($search))
-		{
-			if (stripos($search, 'id:') === 0)
-			{
-				$query->where('a.id = ' . (int) substr($search, 3));
-			}
+			if( $filter_state =='1' || $filter_state =='0' )
+				$query->where("a.state = '".$db->escape($filter_state)."'");
 			else
-			{
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('( a.title LIKE '.$search.'  OR  a.language LIKE '.$search.'  OR  a.description LIKE '.$search.'  OR  a.address LIKE '.$search.' )');
-			}
+				$query->where("(a.state = '1' OR a.state = '0')");
 		}
+		else
+		{
+			$query->where("a.state = '1'");
+		}
+		
+		// Filter by search in title
+		// $search = $this->getState('filter.search');
+		// if (!empty($search))
+		// {
+			// if (stripos($search, 'id:') === 0)
+			// {
+				// $query->where('a.id = ' . (int) substr($search, 3));
+			// }
+			// else
+			// {
+				// $search = $db->Quote('%' . $db->escape($search, true) . '%');
+				// $query->where('( a.title LIKE '.$search.'  OR  a.language LIKE '.$search.'  OR  a.description LIKE '.$search.'  OR  a.address LIKE '.$search.' )');
+			// }
+		// }
 
 		
 
@@ -296,7 +303,6 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 			$query->where("a.category = '".$db->escape($filter_category)."'");
 		}
 
-		
 		//Force category filtering to local if lat,lng
 		if($lat&$lng)
 		{
@@ -316,33 +322,24 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		}
 
 		//Filtering age
-		$filter_age = $this->state->get("filter.age");
-		if ($filter_age) {
-			$query->where("a.age = '".$db->escape($filter_age)."'");
-		}
+		// $filter_age = $this->state->get("filter.age");
+		// if ($filter_age) {
+			// $query->where("a.age = '".$db->escape($filter_age)."'");
+		// }
 		
-		//State - yesinternet
-		if( JFactory::getApplication()->input->get('dashboard','','string') == 'true' )
-		{
-			$query->where("(a.state = '1' OR a.state = '0')");
-		}
-		else
-		{
-			$query->where("a.state = '1'");
-		}		
-		
-		//responders - yesinternet
-		$filter_responders_id = $this->state->get("filter.responders_id");
+		//donor_id - yesinternet
+		$filter_donor_id = $this->state->get("filter.donor_id");
 	
-		if ( $filter_responders_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
+		if ( $filter_donor_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
 			
-			$query->where("b.created_by = '".$filter_responders_id."'");
+			$query->where("b.created_by = '".$db->escape($filter_donor_id)."'");
+			$query->where("b.state = '1'");
 		}
 		
 		//lat lng  - yesinternet
 		if($lat&&$lng){
 			$query->having( $db->escape( 'distance < 50' ) );
-			$query->order($db->escape( 'distance DESC' ));
+			$query->order( $db->escape( 'distance DESC' ) );
 		}		
 		
 		//Featured first - yesinternet
@@ -378,7 +375,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 					//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
 				//}
 				//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
-				$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.(int) $item->id);
+				$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.(int) $item->id);
 			
 			}
 		}
