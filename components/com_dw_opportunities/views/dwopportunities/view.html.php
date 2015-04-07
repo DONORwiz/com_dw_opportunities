@@ -57,6 +57,12 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 			$this->state->set('filter.category','');
 		}
 
+		//Default category
+		if(!isset($jinputFilter['dashboard']))
+		{
+			$this->state->set('filter.dashboard','');
+		}
+		
 		//Default lat
 		if( !isset ( $jinputFilter['lat'] ) )
 		{

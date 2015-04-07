@@ -30,7 +30,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				                'id', 'a.id',
+				'id', 'a.id',
                 'state', 'a.state',
                 'title', 'a.title',
                 'alias', 'a.alias',
@@ -160,7 +160,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 				$this->setState('filter.' . $name, $value);
 			}
 		}
-		
+				
 		$ordering = $app->input->get('filter_order');
 		if (!empty($ordering))
 		{
@@ -226,8 +226,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 
 		//donor_id - yesinternet
 		$filter_donor_id = $this->state->get("filter.donor_id");
-	
-		if ($filter_donor_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
+		$filter_dashboard = $this->state->get("filter.dashboard");
+		
+		if ($filter_donor_id && $filter_dashboard == 'true') {
 			
 			$query->join('LEFT', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
 		
@@ -244,11 +245,11 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 
 
 		//Filtering state - yesinternet
-		$dashboard = JFactory::getApplication()->input->get('dashboard','','string');
+		
 		$filter_state = $this->state->get("filter.state");
 		$canEditStateOpportunity = JFactory::getUser()->authorise('core.edit.state', 'com_dw_opportunities');
 		
-		if( $dashboard == 'true' && $canEditStateOpportunity)
+		if( $filter_dashboard == 'true' && $canEditStateOpportunity)
 		{
 			if( $filter_state =='1' || $filter_state =='0' )
 				$query->where("a.state = '".$db->escape($filter_state)."'");
@@ -330,7 +331,7 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		//donor_id - yesinternet
 		$filter_donor_id = $this->state->get("filter.donor_id");
 	
-		if ( $filter_donor_id && JFactory::getApplication()->input->get('dashboard','','string') == 'true') {
+		if ( $filter_donor_id && $filter_dashboard == 'true' ) {
 			
 			$query->where("b.created_by = '".$db->escape($filter_donor_id)."'");
 			$query->where("b.state = '1'");
@@ -375,7 +376,8 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 					//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
 				//}
 				//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
-				$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.(int) $item->id);
+				if ( isset ( $item->id ) )
+					$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.$item->id);
 			
 			}
 		}
@@ -384,33 +386,16 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 	}
 	
 	
-	public function getCount( $created_by = null )
+	public function getCount( )
     {
-		if(!$created_by)
-			return 0;
+		$this -> setState ('list.select', 'COUNT(*) as count');
 		
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('COUNT(*)');
-		$query->from($db->quoteName('#__dw_opportunities'));
-		$query->where('state IN ( 0 , 1 )');
+		$row = $this -> getItems() ;
 		
-		if( $created_by )
-			$this->setState('filter.created_by', $created_by);
-		
-		//Filtering opportunity_id
-		$filter_created_by = $this->state->get("filter.created_by");
-		if ($filter_created_by) {
-			$query->where("created_by = '".$db->escape($created_by)."'");
-		}
+		$count = $row[0] -> count ;
 
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-		$count = $db->loadResult();
-		
 		return $count;
     }
-	
 	
 	/**
 	 * Overrides the default function to check Date fields format, identified by

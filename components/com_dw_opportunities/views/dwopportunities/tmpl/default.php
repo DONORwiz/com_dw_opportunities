@@ -6,7 +6,10 @@ $app = JFactory::getApplication();
 
 $jinput = $app->input;
 
-$dashboard = ( $jinput->get('dashboard', '', 'string') =='true' ) ? true : null ;
+$jinputFilter = $jinput->get('filter','','array');
+
+$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
+
 
 ?>
 
@@ -22,8 +25,6 @@ $dashboard = ( $jinput->get('dashboard', '', 'string') =='true' ) ? true : null 
 
 	<div class="<?php if($dashboard) { echo 'uk-width-1-1' ;} else { echo 'uk-width-large-6-10 uk-width-medium-1-1';}?>">
 		
-		<?php if( count ( $this->items ) > 1 ) :?>
-		
 		<?php echo JLayoutHelper::render(
 			'filters', 
 			array ( 
@@ -34,7 +35,6 @@ $dashboard = ( $jinput->get('dashboard', '', 'string') =='true' ) ? true : null 
 			JPATH_ROOT .'/components/com_dw_opportunities/layouts/list', 
 			null 
 		); ?>
-		<?php endif;?>
 
 		<h1>
 

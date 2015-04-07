@@ -6,27 +6,22 @@ $item = $this->item;
 $form = $this->form;
 
 ?>
-
-<div class="uk-margin-left">
-
-<nav id="opportunity-wizard-toolbar" class="uk-vertical-align uk-margin-small-left uk-margin-small-right uk-panel-bg" style="height:75px;">
+<nav id="opportunity-wizard-toolbar" class="uk-vertical-align uk-panel uk-panel-blank" style="height:75px;">
 	
 	<div class="uk-vertical-align-middle uk-width-1-1">
 		
 		<div class="uk-button-group uk-vertical-align-middle uk-float-left uk-width-6-10">
 			
 			<?php if( is_null ( $item->state ) ):?>
-			<h1 class="uk-margin-remove"><?php echo JText::_('COM_DONORWIZ_DASHBOARD_VOLUNTEERS_ADD_TITLE'); ?></h1>
+				<h1 class="uk-margin-bottom-remove uk-margin-top-remove uk-margin-left"><?php echo JText::_('COM_DONORWIZ_DASHBOARD_VOLUNTEERS_ADD_TITLE'); ?></h1>
 			<?php endif;?>
 
 			<?php if( !is_null ( $item->state ) ):?>
-			<div data-uk-button-radio>
+			<div data-uk-button-radio class="uk-margin-left">
 				<button class="uk-button published<?php if($item->state=='1') echo ' uk-active';?>"><i class="uk-icon-check uk-icon-small"></i><span class="uk-hidden-small  uk-margin-small-left"><?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PUBLISHED' );?></span></button>
 				<button class="uk-button unpublished<?php if($item->state=='0') echo ' uk-active';?>"><i class="uk-icon-remove uk-icon-small"></i><span class="uk-hidden-small  uk-margin-small-left"><?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_UNPUBLISHED' );?></span></button>
 			</div>
-			<?php endif;?>
-			
-			<?php if( !is_null ( $item->state ) ):?>
+
 			<a class="uk-button uk-button-link" target="_blank" href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&&id='.(int) $form->getValue('id')); ?>" title="<?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_PREVIEW' );?>" data-uk-tooltip>
 				<i class="uk-icon-eye uk-icon-small"></i>
 			</a>
@@ -45,7 +40,7 @@ $form = $this->form;
 				<span class="uk-hidden-small uk-margin-small-left"><?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_CANCEL' );?></span>
 			</a>			
 			<label for="submit-wizard-button">
-				<a class="uk-button uk-button-success">
+				<a class="uk-button uk-button-success uk-margin-right">
 					<i class="uk-icon-save uk-icon-small"></i>
 					<span class="uk-hidden-small uk-margin-small-left"><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_SAVE'); ?></span>
 				</a>
@@ -55,13 +50,13 @@ $form = $this->form;
 
 </nav>
 
-<hr>
-
 <div class="uk-grid uk-margin-large">
     <div class="uk-width-large-1-4"><h2><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_WE_NEED_VOLUNTEERS_FOR'); ?></h2></div>
     <div class="uk-width-large-3-4 uk-hidden-small"><h1><?php echo $item->title;?></h1></div>
 </div>
-	
+
+<div class="uk-panel uk-panel-box uk-panel-blank">
+
 <form id="form-opportunity" class="uk-form uk-form-horizontal form-validate dw-wizard" method="post" action="<?php echo JURI::base();?>index.php?option=com_dw_opportunities&task=dwopportunityform.save" enctype="multipart/form-data">
 	
 	<?php echo $form->getInput('id'); ?>

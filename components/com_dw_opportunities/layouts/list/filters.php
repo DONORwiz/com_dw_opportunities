@@ -15,7 +15,7 @@ $jinputCategory = ( isset ( $jinputFilter['category'] ) ) ? $jinputFilter['categ
 $jinputCreatedBy = ( isset ( $jinputFilter['created_by'] ) ) ? $jinputFilter['created_by'] : '' ;
 $jinputCauseArea = ( isset ( $jinputFilter['causearea'] ) ) ? $jinputFilter['causearea'] : '' ;
 
-$dashboard = ( $jinput->get('dashboard', '', 'string')=='true' ) ? true : null ;
+$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
 
 $donorwizUrl = new DonorwizUrl();
 
