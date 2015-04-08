@@ -10,7 +10,6 @@ $jinputFilter = $jinput->get('filter','','array');
 
 $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
 
-
 ?>
 
 <div class="uk-grid">
@@ -36,6 +35,18 @@ $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboa
 			null 
 		); ?>
 
+		<?php echo JLayoutHelper::render( 
+			'export.items', 
+			array ( 
+				'items' => $this->items , 
+				'component' => 'com_dw_opportunities' , 
+				'fields' => 'id,state,title,created,category,causearea,skills,description,address' ,
+				'filename' => 'donorwiz_opportunities_'.JFactory::getUser() -> name.'_'.JFactory::getDate()->format('d M Y') 
+			) , 
+			JPATH_ROOT .'/components/com_dw_opportunities/layouts' , 
+			null 
+		); ?>
+		
 		<h1>
 
 		<?php if( $this->pagination->total == 0 ):?>
@@ -51,7 +62,7 @@ $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboa
 		<?php endif;?>
 
 		</h1>
-
+		
 		<?php if ( $this->items ) : ?>
 
 		<?php foreach ( $this->items as $i => $item) : ?>
