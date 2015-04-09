@@ -135,6 +135,21 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 				<?php echo JLayoutHelper::render( 'info' , array( 'beneficiary_id' => $item -> created_by ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/beneficiary' , null ); ?>	
 		</div>
 
+		<div class="uk-width-1-1">
+			<?php echo JLayoutHelper::render( 
+				'list.opportunities' , 
+				array( 
+					'created_by' => $item -> created_by, 
+					'template' => 'textlinks',
+					'list.limit' => 5,
+					'itemid' => $item -> id	,
+					'title' => '<h3>'.JText::sprintf('COM_DW_OPPORTUNITIES_MORE_ADS').'</h3>'
+				) , 
+				JPATH_ROOT .'/components/com_dw_opportunities/layouts' , 
+				null ); 
+			?>	
+		</div>
+		
 		<div class="uk-width-1-1 uk-margin-top">
 			<!-- www.addthis.com -->
 			<div class="addthis_sharing_toolbox"></div>

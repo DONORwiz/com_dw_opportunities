@@ -25,13 +25,14 @@ $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboa
 	<div class="<?php if($dashboard) { echo 'uk-width-1-1' ;} else { echo 'uk-width-large-6-10 uk-width-medium-1-1';}?>">
 		
 		<?php echo JLayoutHelper::render(
-			'filters', 
+			'list.filters.filters', 
 			array ( 
 				'beneficiaries' => $this->beneficiaries, 
 				'causeareas' => $this->causeareas, 
 				'resetlink' => $this->resetlink, 
+				'pagination' => $this->pagination, 
 			), 
-			JPATH_ROOT .'/components/com_dw_opportunities/layouts/list', 
+			JPATH_ROOT .'/components/com_dw_opportunities/layouts', 
 			null 
 		); ?>
 
