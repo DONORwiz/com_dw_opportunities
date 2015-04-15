@@ -5,6 +5,7 @@ defined('_JEXEC') or die;
 $beneficiaries = $displayData['beneficiaries'];
 $causeareas = $displayData['causeareas'];
 $resetlink = $displayData['resetlink'];
+$pagination = $displayData['pagination'];
 
 $app = JFactory::getApplication();
 $jinput = $app->input;
@@ -15,11 +16,12 @@ $jinputCategory = ( isset ( $jinputFilter['category'] ) ) ? $jinputFilter['categ
 $jinputCreatedBy = ( isset ( $jinputFilter['created_by'] ) ) ? $jinputFilter['created_by'] : '' ;
 $jinputCauseArea = ( isset ( $jinputFilter['causearea'] ) ) ? $jinputFilter['causearea'] : '' ;
 
-$dashboard = ( $jinput->get('dashboard', '', 'string')=='true' ) ? true : null ;
+$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
 
 $donorwizUrl = new DonorwizUrl();
 
 ?>
+<form id="form-date-filter" action="<?php echo JRoute::_('?Itemid=261'); ?>" method="get" class="form-validate uk-form uk-form-stacked" enctype="multipart/form-data">
 
 <div class="uk-width-1-1 uk-margin-small-bottom">
 
@@ -33,19 +35,18 @@ $donorwizUrl = new DonorwizUrl();
 						
 						<?php if(!$dashboard):?>
 						
-						<select class="uk-form-large uk-width-1-1" onchange="if (this.value) window.location.href=this.value" <?php if ( !count( $beneficiaries ) ) echo 'disabled="true"'; ?> >
+						<select name="filter[created_by]" class="uk-form-large uk-width-1-1" onchange="this.form.submit()" <?php if ( !count( $beneficiaries ) ) echo 'disabled="true"'; ?> >
 
-							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'created_by' => '' ) ) ) ;?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION');?></option>
+							<option value="" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION');?></option>
 							
 							<?php if ( count( $beneficiaries ) ) : ?>
 								
 								<?php foreach ( $beneficiaries as $key => $value) : ?>
 
 									<option 
+										value ="<?php echo $value['user_id'];?>"
+
 										
-										<?php if( $jinputCreatedBy != $value['user_id'] ) :?>
-											value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams(  array( 'filter' => array ( 'created_by' => $value['user_id'] ) ) );?>"
-										<?php endif;?>
 										
 										<?php if( $jinputCreatedBy == $value['user_id'] ) :?>
 											selected="selected"
@@ -69,18 +70,19 @@ $donorwizUrl = new DonorwizUrl();
 				
 				<div class="uk-width-medium-1-2">
 					
-						<select class="uk-form-large uk-width-1-1" onchange="if (this.value) window.location.href=this.value">
+						<select name="filter[causearea]" class="uk-form-large uk-width-1-1" onchange="this.form.submit()">
 						
-							<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'causearea' => '' ) ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_CAUSE_AREA');?></option>
+							<option  value="" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_CAUSE_AREA');?></option>
 							
 							<?php if ( $causeareas && count( $causeareas ) > 0 ) : ?>
 								
 								<?php foreach ($causeareas as $key => $causearea) :  ?>
 
 									<option 
-									<?php if( $jinputCauseArea != $causearea) :?>
-										value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array( 'filter' => array ( 'causearea' => $causearea ) ) );?>" 
-									<?php endif; ?>
+									
+										value ="<?php echo $causearea;?>"
+						
+						
 									<?php if( $jinputCauseArea == $causearea ) :?>
 										selected="selected"
 									<?php endif; ?>
@@ -181,7 +183,7 @@ $donorwizUrl = new DonorwizUrl();
 			</a>
 		<?php endif;?>
 		
-		<select class="uk-form-small uk-hidden" onchange="if (this.value) window.location.href=this.value">
+		<select class="uk-form-small uk-hidden" onchange="this.form.submit()">
 
 			<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => '' ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_SORT_BY_DATE');?></option>
 			<option value="<?php echo $donorwizUrl -> getCurrentUrlWithNewParams( array ( 'created_by' => '' ) ); ?>" ><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_SORT_BY_EVENT');?></option>
@@ -199,7 +201,14 @@ $donorwizUrl = new DonorwizUrl();
 		</a>
 	
 	</div>
+
+
+    <?php echo  $pagination->getLimitBox(); ?>
+
 	
 
-
+	
 </div>
+
+
+</form>  

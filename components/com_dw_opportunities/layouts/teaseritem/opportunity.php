@@ -6,14 +6,18 @@ $item = $displayData['item'];
 
 $descrLength = ( isset ( $displayData['descrLength'] ) ) ? $displayData['descrLength'] : 0 ;
 
-if( JFactory::getApplication()->input->get('dashboard','','string') == 'true')
+$app = JFactory::getApplication();
+
+$jinput = $app->input;
+
+$jinputFilter = $jinput->get('filter','','array');
+
+$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
+
+if( $dashboard == 'true')
 {
 	$descrLength = 0;
 }
-
-$app = JFactory::getApplication();
-$jinput = $app->input;
-$dashboard = ( $jinput->get('dashboard', '', 'string') == 'true' ) ? true : null ;
 
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 $created_by = CFactory::getUser( $item->created_by ) ;
