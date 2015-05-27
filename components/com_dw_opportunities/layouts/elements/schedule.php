@@ -44,4 +44,3 @@ $time_end = ( $item_time_end && $item_date_end ) ? JFactory::getDate('0000-00-00
 		</span>
 	<?php endif;?>
 <?php endif;?>
-

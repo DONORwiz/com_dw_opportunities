@@ -193,13 +193,21 @@
 			onchange="jQuery('#volunteers_no_elm_wrapper').toggleClass('visibility-hidden');"
         />
 
+	   <field name="volunteers_disabled" 
+			
+			type="checkbox"
+            label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_DISABLED"
+			tooltip="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_DISABLED_TOOLTIP"
+			default="0"
+        />
+	   
 		<field name="volunteers_no" 
 			
 			type="integer"
             label="COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_NO"
 			default=""
 			first="1"
-			last="15"
+			last="30"
 			step="1"
         />
        

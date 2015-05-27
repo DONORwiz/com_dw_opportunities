@@ -26,7 +26,8 @@ class Dw_opportunitiesModelDwOpportunity extends JModelItem {
      * @since	1.6
      */
     protected function populateState() {
-        $app = JFactory::getApplication('com_dw_opportunities');
+        
+		$app = JFactory::getApplication('com_dw_opportunities');
 
         // Load state from the request userState on edit or from the passed variable on default
         if (JFactory::getApplication()->input->get('layout') == 'edit') {
@@ -81,13 +82,14 @@ class Dw_opportunitiesModelDwOpportunity extends JModelItem {
             }
         }
 
-        
 		if ( isset($this->_item->created_by) ) {
 			$this->_item->created_by_name = JFactory::getUser($this->_item->created_by)->name;
 		}
+		
 		if ( isset($this->_item->modified_by) ) {
 			$this->_item->modified_by_name = JFactory::getUser($this->_item->modified_by)->name;
 		}
+		
 		//$this->_item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . $this->_item->category);
 		//$this->_item->causearea = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CAUSEAREA_OPTION_' . $this->_item->causearea);
 
@@ -103,12 +105,84 @@ class Dw_opportunitiesModelDwOpportunity extends JModelItem {
 		// }
 		// $this->_item->skills = !empty($options_text) ? implode(',', $options_text) : $this->_item->skills;
 		//$this->_item->age = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_AGE_OPTION_' . $this->_item->age);
-		//var_dump($this->_item->id);
-		$this->_item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.$this->_item->id );
-		$this->_item->parameters = json_decode($this->_item->parameters);
-        
+
+		$this -> _item -> url 				= JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&id='.$this->_item->id );
+		$this -> _item -> parameters 		= json_decode($this->_item->parameters);
+		$this -> _item -> startDateExpired 	= $this-> getItemStartDateExpired( $this->_item->date_start );
+
+		//Get item responses
+		$this->_item-> userResponses = $this -> getItemUserResponses( JFactory::getUser() , $id );
+		$this->_item-> responses = $this -> getItemResponses( $this->_item );
+		
+		$this->_item->volunteersNeeded = $this -> getItemVolunteersNeeded( $this->_item );
+		$this->_item->availablePositions = $this -> getItemAvailablePositions( $this->_item );
+		
 		return $this->_item;
     }
+
+	protected function getItemUserResponses ( $user , $id ){
+		
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
+		$responsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));	
+		$responses = $responsesModel -> getItemsByUser( $user , $id );
+		return $responses;
+	
+	}
+
+	protected function getItemResponses ( $item ){
+		
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
+		
+		$responsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));	
+		
+		$responses = $responsesModel -> getItemsByOpportunity( $item );
+		
+		return $responses;
+	}
+	
+	protected function getItemStartDateExpired( $date_start ){
+		
+		$startDateExpired = false;
+		
+		//Check if start date is earlier than today
+		$date_start = strtotime( $date_start );
+		
+		if( $date_start != false ){
+		
+			$today = strtotime( JFactory::getDate()->format('Y-m-d') );
+		
+			$data_diff = $date_start - 	$today ;
+			
+			if ( $data_diff <= 0 ){
+				$startDateExpired = true;
+			}
+		
+		}
+		
+		return $startDateExpired;
+		
+	}
+	
+	protected function getItemAvailablePositions( $item ){
+	
+		$availablePositions = ( $item->volunteersNeeded ) ? ( $item->volunteersNeeded - $item->responses['statistics']['accepted'] ) : 1000 ;
+		
+		return ( $availablePositions > 0 ) ? $availablePositions : 0 ;
+		
+	}
+	
+	protected function getItemVolunteersNeeded( $item ){
+		
+		if ( isset ( $item->parameters->volunteers_no_enabled ) && $item->parameters->volunteers_no_enabled=='1' && isset ( $item->parameters->volunteers_no ) ){
+			return $item->parameters->volunteers_no;
+		}
+		else{
+			return null ;
+		}
+
+	}
+	
+
 
     public function getTable($type = 'Opportunity', $prefix = 'Dw_opportunitiesTable', $config = array()) {
         $this->addTablePath( JPATH_ADMINISTRATOR . '/components/com_dw_opportunities/tables');

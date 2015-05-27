@@ -23,7 +23,7 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 		$app = JFactory::getApplication();
 
         $this->state = $this->get('State');
-		
+		$this->items = $this->get('Items');
 		$this->jinputFilter = $app->input->get('filter','','array');
 
 		//Default ordering
@@ -74,13 +74,11 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 			$this->state->set('filter.lng','0');
 		}
 		
-        $this->items = $this->_getItemsResponses ( $this->get('Items') );
-		
 		$this->pagination = $this->get('Pagination');
-		
 
         $this->params = $app->getParams('com_dw_opportunities');
-        //$this->filterForm = $this->get('FilterForm');
+        
+		//$this->filterForm = $this->get('FilterForm');
 		//$this->activeFilters = $this->get('ActiveFilters');
 		
 		$this->beneficiaries = $this->_getVolunteeringBeneficiaries();
@@ -171,28 +169,6 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
 	}
 	
 	
-	protected function _getItemsResponses( $items )
-	{
-	
-		if( JFactory::getUser() -> guest )
-		{
-			return $items;
-		}
-		
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
-		
-		foreach ($items as $item) 
-		{
-		
-			$responsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));
-			$item -> responses = $responsesModel -> getItemsByOpportunity( $item -> id  );
-			
-		}
-
-		return $items;
-
-	}
-
     /**
      * Prepares the document
      */

@@ -225,6 +225,16 @@ $form = $this->form;
 							</label>
 							<div class="uk-form-controls"><?php echo $form->getInput('volunteers_no','parameters'); ?></div>
 						</div>
+						
+						<div class="uk-form-row">
+							<label class="uk-form-label"><?php echo $form->getLabel('volunteers_disabled','parameters'); ?>
+							<?php if( $form ->getFieldAttribute( 'volunteers_disabled' , 'tooltip' , '' , 'parameters') ) :?>
+								<i data-uk-tooltip title="<?php echo JText::_( $form ->getFieldAttribute( 'volunteers_disabled', 'tooltip' , '' , 'parameters') );?>" class="uk-icon-question-circle uk-margin-left-small uk-float-right"></i>
+							<?php endif;?>	
+							</label>
+							<div class="uk-form-controls"><?php echo $form->getInput('volunteers_disabled','parameters'); ?></div>
+						</div>
+					
 					</li> 
 
 					<li>

@@ -5,6 +5,10 @@ defined('_JEXEC') or die;
 
 $item = $this -> item ;
 
+$volunteersNeeded =  $item ->volunteersNeeded;
+$availablePositions =  $item -> availablePositions;
+$volunteersTotal =  $item -> responses ['statistics']['total'];
+
 JFactory::getLanguage()->load('com_donorwiz');
 JFactory::getLanguage()->load('com_dw_opportunities_responses');
 JFactory::getLanguage()->load('com_dw_opportunities_responses_statuses');
@@ -41,19 +45,34 @@ JHtml::script(Juri::base() . 'media/com_donorwiz/libs/js/listjs/list.min.js');
 		</a>
 	</div>
 	
+	<?php if( isset ( $item -> parameters -> volunteers_disabled ) && $item -> parameters -> volunteers_disabled =="1" ) : ?>
+	<div class="uk-alert uk-alert-warning"><?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_LABEL_VOLUNTEERS_DISABLED_WARNING' );?></div>
+	<?php endif;?>
 
-	<h1 class="uk-article-title uk-text-center">
-		<span><?php echo JText::_('COM_DW_OPPORTUNITIES_RESPONSES_MY_VOLUNTEERS'); ?>:</span> <?php echo $item->title; ?>
+	<h1 class="uk-article-title">
+		<?php echo $item->title; ?>
+		
+		<?php if($volunteersNeeded):?>
+			<span class="uk-text-primary">[<?php echo JText::sprintf( 'COM_DW_OPPORTUNITIES_RESPONSES_AVAILABLE_POSITIONS_NO', $volunteersNeeded );?>]</span>
+		<?php endif;?>
+	
 	</h1>
 	
-		<hr>
+	<div>
+		<?php echo JText::_( 'COM_DW_OPPORTUNITIES_RESPONSES_INTERESTED_TOTAL' );?>: <?php echo $volunteersTotal ;?>
+		<?php if ($volunteersNeeded):?>
+		</br>
+		<?php echo JText::_( 'COM_DW_OPPORTUNITIES_RESPONSES_OPEN_POSITIONS' );?>: <?php echo $availablePositions ;?>
+		<?php endif;?>
+	</div>
+		
+	<hr>
 
-
-	<?php echo JLayoutHelper::render( 'statistics' , array( 'statistics' => $item->responses['statistics'] ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/volunteers' , null ); ?>	
+	<?php echo JLayoutHelper::render( 'volunteers.statistics' , array( 'statistics' => $item->responses['statistics'] , 'opportunity' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>	
 
 	<?php if( $item -> responses ['items'] ): ?>
 
-	<?php echo JLayoutHelper::render( 'responses' , array( 'items'=> $item -> responses ['items'] ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/volunteers' , null ); ?>	
+	<?php echo JLayoutHelper::render( 'volunteers.responses' , array( 'items'=> $item -> responses ['items'] ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>	
 
 	<?php endif;?>
 
