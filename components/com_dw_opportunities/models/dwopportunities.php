@@ -365,6 +365,8 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		
 		if ( is_array( $items ) )
 		{
+			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities_responses/models', 'Dw_opportunities_responsesModel');
+		
 			foreach($items as $item){
 		
 				//$item->category = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_CATEGORY_OPTION_' . strtoupper($item->category));
@@ -376,8 +378,12 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 					//$options_text[] = JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_SKILLS_OPTION_' . strtoupper($option));
 				//}
 				//$item->skills = !empty($options_text) ? implode(',', $options_text) : $item->skills;
-				if ( isset ( $item->id ) )
+				if ( isset ( $item->id ) ){
 					$item->url = JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.$item->id);
+				}
+				
+				$responsesModel = JModelLegacy::getInstance('DwOpportunitiesresponses', 'Dw_opportunities_responsesModel', array('ignore_request' => true));
+				$item -> responses = $responsesModel -> getItemsByOpportunity( $item  );
 			
 			}
 		}
