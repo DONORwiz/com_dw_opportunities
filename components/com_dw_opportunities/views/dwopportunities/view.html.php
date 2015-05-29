@@ -21,159 +21,44 @@ class Dw_opportunitiesViewDwOpportunities extends JViewLegacy {
     public function display($tpl = null) {
         
 		$app = JFactory::getApplication();
-
-        $this->state = $this->get('State');
+		$this->state = $this->get('State');
+		$isDashboard = $this->state->get("filter.dashboard") ;
+		
+		if ( $isDashboard )
+		{
+			$donorwizUser = new DonorwizUser( JFactory::getUser() -> id );
+			$isBeneficiary = $donorwizUser -> isBeneficiary('com_donorwiz');
+			$isDonor = $donorwizUser -> isDonor();
+			
+			if( $isDonor ){
+				$this->state->set('filter.donor_id', JFactory::getUser()->id );
+			}
+			if ( $isBeneficiary ){
+				$this->state->set('filter.created_by', JFactory::getUser()->id );
+			}
+		}
+		
 		$this->items = $this->get('Items');
-		$this->jinputFilter = $app->input->get('filter','','array');
-
-		//Default ordering
-		if( $app->input->get('filter_order','','string')=='' )
-		{
-			$this->state->set('list.ordering','a.created');
-		}
-		
-		//Default ordering
-		if( $app->input->get('filter_order_Dir','','string')=='' )
-		{
-			$this->state->set('list.direction','desc');
-		}
-
-		$jinputFilter = $this->jinputFilter;
-		
-		//Default created_by
-		if(!isset($jinputFilter['created_by']))
-		{
-			$this->state->set('filter.created_by','');
-		}
-		//Default causearea
-		if(!isset($jinputFilter['causearea']))
-		{
-			$this->state->set('filter.causearea','');
-		}		
-
-		//Default category
-		if(!isset($jinputFilter['category']))
-		{
-			$this->state->set('filter.category','');
-		}
-
-		//Default category
-		if(!isset($jinputFilter['dashboard']))
-		{
-			$this->state->set('filter.dashboard','');
-		}
-		
-		//Default lat
-		if( !isset ( $jinputFilter['lat'] ) )
-		{
-			$this->state->set('filter.lat','0');
-		}
-		//Default lng
-		if( !isset ( $jinputFilter['lng'] ) )
-		{
-			$this->state->set('filter.lng','0');
-		}
-		
 		$this->pagination = $this->get('Pagination');
-
-        $this->params = $app->getParams('com_dw_opportunities');
-        
-		//$this->filterForm = $this->get('FilterForm');
-		//$this->activeFilters = $this->get('ActiveFilters');
-		
-		$this->beneficiaries = $this->_getVolunteeringBeneficiaries();
-		$this->causeareas = $this->_getCauseAreas();
-		$this->resetlink = $this->_showResetlink( JFactory::getApplication()->input );
+		$this->params = $app->getParams('com_dw_opportunities');
+		$this->filterForm = $this->get('FilterForm');
+		$this->activeFilters = $this->get('ActiveFilters');	
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
 				throw new Exception(implode("\n", $errors));
         }
-
 		
         $this->_prepareDocument();
         parent::display($tpl);
     }
 	
-	protected function _getVolunteeringBeneficiaries() {
-		
-		//Get Volunteering beneficiaries from component parameters
-        $params = JFactory::getApplication()->getParams('com_dw_opportunities');
-		$volunteeringBeneficiariesUsergroupsIDs=$params->get('beneficiary_usergroups');
-		
-		//Get the user ids array
-		$donorwizusers = new DonorwizUsers();
-		$volunteeringBeneficiaries =  $donorwizusers -> getUsersByUserGroupsIDs ( $volunteeringBeneficiariesUsergroupsIDs , true ) ;
-		
-		if ( !count( $volunteeringBeneficiaries ) )
-		{
-			return array();
-		}
-			
-		//Get profile data for each user
-		include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
-		
-		$volunteeringBeneficiariesArray = array();
-		
-		foreach ( $volunteeringBeneficiaries as $key => $userID)
-		{
-
-			$volunteeringBeneficiariesArray [$key] ['user_id'] = $userID;
-			$volunteeringBeneficiariesArray [$key] ['name'] = CFactory::getUser( $userID )->getDisplayName();
-		}		
-	
-		return $volunteeringBeneficiariesArray;		
-	}
-	
-	protected function _getCauseAreas() {
-		
-		require_once(JPATH_ROOT.'/components/com_community/libraries/core.php');
-		
-		$db = JFactory::getDBO();
-		
-		$causeareas = new CTableProfileField($db);
-		$causeareas -> load( array('fieldcode'=>'FIELD_OBJECTIVE') );
-		$causeareas->options = explode("\n",$causeareas->options);
-
-		return $causeareas->options;		
-	}
-	
-	
-	protected function _showResetlink( $jinput ){
-		
-		$jinputFilter = $jinput->get('filter','','array');
-		
-		$jinputCategory = ( isset ( $jinputFilter['category'] ) ) ? $jinputFilter['category'] : '' ;
-		$jinputCreatedBy = ( isset ( $jinputFilter['created_by'] ) ) ? $jinputFilter['created_by'] : '' ;
-		$jinputCauseArea = ( isset ( $jinputFilter['causearea'] ) ) ? $jinputFilter['causearea'] : '' ;
-
-		$showResetlink = false;
-		
-		if( 
-			$jinputCategory		!='' ||	
-			$jinputCreatedBy		!='' ||	
-			$jinputCauseArea		!='' 
-			// $jinput->get('category', '', 'string')		!=''	|| 
-			// $jinput->get('category', '', 'string')		!=''	||
-			// $jinput->get('created_by', '', 'string')	!=''	||	
-			// $jinput->get('nearby_place', '', 'string')	!=''	
-		)
-		{
-			
-			$showResetlink = true;
-			
-		}
-				
-		return $showResetlink;
-		
-	}
-	
-	
     /**
      * Prepares the document
      */
     protected function _prepareDocument() {
-        $app = JFactory::getApplication();
+        
+		$app = JFactory::getApplication();
         $menus = $app->getMenu();
         $title = null;
 

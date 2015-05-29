@@ -8,13 +8,13 @@ $jinput = $app->input;
 
 $jinputFilter = $jinput->get('filter','','array');
 
-$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
+$isDashboard = $this->state->get("filter.dashboard") ;
 
 ?>
 
 <div class="uk-grid">
 	
-	<?php if(!$dashboard) :?>
+	<?php if(!$isDashboard) :?>
 	<div class="uk-width-large-4-10 uk-hidden-medium uk-hidden-small" style="min-height:1px;">
 	
 		<?php echo JLayoutHelper::render('multiple', array ( 'items' => $this->items , 'widthClass' => 'uk-width-4-10' ) , JPATH_ROOT .'/components/com_donorwiz/layouts/map' , null ); ?>
@@ -22,19 +22,9 @@ $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboa
 	</div>
 	<?php endif;?>
 
-	<div class="<?php if($dashboard) { echo 'uk-width-1-1' ;} else { echo 'uk-width-large-6-10 uk-width-medium-1-1';}?>">
+	<div class="<?php if($isDashboard) { echo 'uk-width-1-1' ;} else { echo 'uk-width-large-6-10 uk-width-medium-1-1';}?>">
 		
-		<?php echo JLayoutHelper::render(
-			'list.filters.filters', 
-			array ( 
-				'beneficiaries' => $this->beneficiaries, 
-				'causeareas' => $this->causeareas, 
-				'resetlink' => $this->resetlink, 
-				'pagination' => $this->pagination, 
-			), 
-			JPATH_ROOT .'/components/com_dw_opportunities/layouts', 
-			null 
-		); ?>
+		<?php echo JLayoutHelper::render('default_filter', array('view' => $this), dirname(__FILE__)); ?>
 
 		<?php echo JLayoutHelper::render( 
 			'export.items', 
@@ -68,7 +58,7 @@ $dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboa
 
 		<?php foreach ( $this->items as $i => $item) : ?>
 
-			<?php echo JLayoutHelper::render('teaseritem.opportunity', array ( 'item' => $item , 'descrLength' => 0 ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>
+			<?php echo JLayoutHelper::render('teaseritem.opportunity', array ( 'item' => $item , 'isDashboard' => $isDashboard , 'descrLength' => 0 ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>
 
 		<?php endforeach; ?>
 

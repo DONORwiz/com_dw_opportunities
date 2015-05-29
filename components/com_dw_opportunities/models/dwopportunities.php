@@ -176,21 +176,27 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 			$list['direction'] = $app->input->get('filter_order_Dir');
 			$app->setUserState($this->context . '.list', $list);
 		}
-
-		$list = $app->getUserState($this->context . '.list');
-
-		if (empty($list['ordering']))
-		{
-			$list['ordering'] = 'created';
+		
+		//Dahsboard
+		$dashboard = $app->input->get('dashboard');
+		if( $dashboard ){
+			$this->setState('filter.dashboard', true);
 		}
+		
+		//$list = $app->getUserState($this->context . '.list');
 
-		if (empty($list['direction']))
-		{
-			$list['direction'] = 'desc';
-		}
+		//if (empty($list['ordering']))
+		//{
+			//$list['ordering'] = 'created';
+		//}
 
-		$this->setState('list.ordering', $list['ordering']);
-		$this->setState('list.direction', $list['direction']);
+		//if (empty($list['direction']))
+		//{
+			//$list['direction'] = 'desc';
+		//}
+
+		//$this->setState('list.ordering', $list['ordering']);
+		//$this->setState('list.direction', $list['direction']);
 	}
 
 	/**
@@ -213,6 +219,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 				)
 			);
 		
+		$user = JFactory::getUser() ;
+		$filter_dashboard = $this->state->get("filter.dashboard");
+
 		$lat = $this->getState('filter.lat');
 		$lng = $this->getState('filter.lng');		
 		
@@ -225,13 +234,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		$query->from('`#__dw_opportunities` AS a');
 
 		//donor_id - yesinternet
-		$filter_donor_id = $this->state->get("filter.donor_id");
-		$filter_dashboard = $this->state->get("filter.dashboard");
-		
-		if ($filter_donor_id && $filter_dashboard == 'true') {
-			
+		$filter_donor_id = ( $this->state->get("filter.donor_id") && $filter_dashboard ) ? $this->state->get("filter.donor_id") : null ;
+		if ( $filter_donor_id ) {
 			$query->join('LEFT', '#__dw_opportunities_responses AS b ON a.id = b.opportunity_id');
-		
 		}
 
 		// // Join over the users for the checked out user.
@@ -244,47 +249,41 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		// $query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
 
 
-		//Filtering state - yesinternet
-		
+		//Filtering state
 		$filter_state = $this->state->get("filter.state");
-		$canEditStateOpportunity = JFactory::getUser()->authorise('core.edit.state', 'com_dw_opportunities');
-		
-		if( $filter_dashboard == 'true' && $canEditStateOpportunity)
-		{
-			if( $filter_state =='1' || $filter_state =='0' )
-				$query->where("a.state = '".$db->escape($filter_state)."'");
-			else
-				$query->where("(a.state = '1' OR a.state = '0')");
+		if( $filter_state=='0' || $filter_state=='1' ){
+			$query->where("a.state = '".$db->escape($filter_state)."'");
 		}
-		else
-		{
+
+		//If user is guest or we are not in dahsboard or user cannot edit item state, show ONLY published items
+		if ( $user->guest || !$filter_dashboard || !$user->authorise('core.edit.state', 'com_dw_opportunities'))
+		{  
 			$query->where("a.state = '1'");
 		}
 		
-		// Filter by search in title
-		// $search = $this->getState('filter.search');
-		// if (!empty($search))
-		// {
-			// if (stripos($search, 'id:') === 0)
-			// {
-				// $query->where('a.id = ' . (int) substr($search, 3));
-			// }
-			// else
-			// {
-				// $search = $db->Quote('%' . $db->escape($search, true) . '%');
-				// $query->where('( a.title LIKE '.$search.'  OR  a.language LIKE '.$search.'  OR  a.description LIKE '.$search.'  OR  a.address LIKE '.$search.' )');
-			// }
-		// }
-
+		//Do not query Trashed or Archived items
+		$query->where("a.state NOT IN ('-2','-1')");
 		
+		// Filter by search in title
+		$search = $this->getState('filter.search');
+		if (!empty($search))
+		{
+			if (stripos($search, 'id:') === 0)
+			{
+				$query->where('a.id = ' . (int) substr($search, 3));
+			}
+			else
+			{
+				$search = $db->Quote('%' . $db->escape($search, true) . '%');
+				$query->where('( a.title LIKE '.$search.'  OR  a.language LIKE '.$search.'  OR  a.description LIKE '.$search.'  OR  a.address LIKE '.$search.' )');
+			}
+		}
 
 		//Filtering created_by
 		$filter_created_by = $this->state->get("filter.created_by");
 		if ($filter_created_by) {
 			$query->where("a.created_by = '".$db->escape($filter_created_by)."'");
 		}
-
-		//Filtering created
 
 		//Checking "_dateformat"
 		$filter_created_from = $this->state->get("filter.created_from_dateformat");
@@ -296,16 +295,14 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 			$query->where("a.created <= '".$db->escape($filter_created_to)."'");
 		}
 
-		//Filtering language
-
 		//Filtering category
 		$filter_category = $this->state->get("filter.category");
-		if ($filter_category) {
+		if ( $filter_category ) {
 			$query->where("a.category = '".$db->escape($filter_category)."'");
 		}
 
 		//Force category filtering to local if lat,lng
-		if($lat&$lng)
+		if( $lat & $lng )
 		{
 			$query->where("a.category = 'local'");
 		}
@@ -322,35 +319,25 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 			$query->where("a.skills LIKE '%\"".$db->escape($filter_skills)."\"%'");
 		}
 
-		//Filtering age
-		// $filter_age = $this->state->get("filter.age");
-		// if ($filter_age) {
-			// $query->where("a.age = '".$db->escape($filter_age)."'");
-		// }
-		
-		//donor_id - yesinternet
-		$filter_donor_id = $this->state->get("filter.donor_id");
-	
-		if ( $filter_donor_id && $filter_dashboard == 'true' ) {
-			
-			$query->where("b.created_by = '".$db->escape($filter_donor_id)."'");
+		//Filtering donor_id
+		if ( $filter_donor_id ) {
+			$query->where("b.created_by = '".$db->escape( $filter_donor_id )."'");
 			$query->where("b.state = '1'");
 		}
 		
-		//lat lng  - yesinternet
+		//Disatnce
 		if($lat&&$lng){
 			$query->having( $db->escape( 'distance < 50' ) );
 			$query->order( $db->escape( 'distance DESC' ) );
 		}		
 		
-		//Featured first - yesinternet
+		//Ordering Featured
         $query->order($db->escape('a.featured DESC'));
 		
-
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
-		
+
 		if ($orderCol && $orderDirn)
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
