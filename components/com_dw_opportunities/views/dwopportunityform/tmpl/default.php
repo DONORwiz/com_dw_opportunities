@@ -39,12 +39,10 @@ $form = $this->form;
 				<i class="uk-icon-long-arrow-left uk-icon-small"></i>
 				<span class="uk-hidden-small uk-margin-small-left"><?php echo JText::_( 'COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_CANCEL' );?></span>
 			</a>			
-			<label for="submit-wizard-button">
-				<a class="uk-button uk-button-success uk-margin-right">
+				<a class="uk-button uk-button-success uk-margin-right" onclick="jQuery('#form-opportunity').trigger('submit');">
 					<i class="uk-icon-save uk-icon-small"></i>
 					<span class="uk-hidden-small uk-margin-small-left"><?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_WIZARD_SAVE'); ?></span>
 				</a>
-			</label>
 		</div>
 	</div>
 
