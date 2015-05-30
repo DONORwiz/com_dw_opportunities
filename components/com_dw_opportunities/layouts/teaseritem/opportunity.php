@@ -88,13 +88,13 @@ $avatarUrl = $created_by->getThumbAvatar();
 					<?php echo JText::_('COM_DW_OPPORTUNITIES_READ_MORE');?>
 				</a>	
 				</div>
-
+				<!-- www.addthis.com 
 				<div class="uk-width-1-2 uk-hidden uk-text-right">
-				<!-- www.addthis.com -->
+				
 				<div class="addthis_sharing_toolbox"></div>
 
 				</div>
-
+				-->
 			</div>
 			
 			<?php endif;?>
