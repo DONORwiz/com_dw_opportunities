@@ -3,6 +3,7 @@
 defined('_JEXEC') or die;
 
 $item = $displayData['item'];
+$isDashboard = $displayData['isDashboard'];
 
 $descrLength = ( isset ( $displayData['descrLength'] ) ) ? $displayData['descrLength'] : 0 ;
 
@@ -11,13 +12,6 @@ $app = JFactory::getApplication();
 $jinput = $app->input;
 
 $jinputFilter = $jinput->get('filter','','array');
-
-$dashboard = ( isset ( $jinputFilter[ 'dashboard' ] ) && $jinputFilter[ 'dashboard' ] == 'true' ) ? true : null ;
-
-if( $dashboard == 'true')
-{
-	$descrLength = 0;
-}
 
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 $created_by = CFactory::getUser( $item->created_by ) ;
@@ -41,7 +35,7 @@ $avatarUrl = $created_by->getThumbAvatar();
 
 		<div class="uk-width-small-8-10 uk-width-large-5-6">
 			
-			<a <?php if ($dashboard) echo 'target="_blank"';?> 
+			<a <?php if ($isDashboard) echo 'target="_blank"';?> 
 				href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.(int) $item->id); ?>"
 			>
 				<h2 class="uk-margin-remove">
@@ -55,7 +49,7 @@ $avatarUrl = $created_by->getThumbAvatar();
 			
 			<div>			
 			
-			<?php if( $dashboard  ) :?>
+			<?php if( $isDashboard  ) :?>
 
 				<?php echo JLayoutHelper::render( 'edit.opportunity', array ( 'opportunity' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/acl/button' , null ); ?>
 				<?php echo JLayoutHelper::render( 'edit.opportunityvolunteers', array ( 'opportunity' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/acl/button' , null ); ?>
@@ -72,7 +66,7 @@ $avatarUrl = $created_by->getThumbAvatar();
 				<div class="uk-hidden-medium uk-hidden-small uk-margin-top"><?php echo substr( $item->description , 0, $descrLength).'...'; ?></div>
 			<?php endif; ?>
 
-			<?php if (!$dashboard): ?>
+			<?php if (!$isDashboard): ?>
 			
 			<div class="uk-grid uk-margin-small-top">
 				
@@ -94,13 +88,13 @@ $avatarUrl = $created_by->getThumbAvatar();
 					<?php echo JText::_('COM_DW_OPPORTUNITIES_READ_MORE');?>
 				</a>	
 				</div>
-
+				<!-- www.addthis.com 
 				<div class="uk-width-1-2 uk-hidden uk-text-right">
-				<!-- www.addthis.com -->
+				
 				<div class="addthis_sharing_toolbox"></div>
 
 				</div>
-
+				-->
 			</div>
 			
 			<?php endif;?>

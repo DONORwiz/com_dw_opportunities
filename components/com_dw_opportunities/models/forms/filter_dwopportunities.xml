@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search"
+               type="text"
+               hint="COM_DW_OPPORTUNITIES_FILTER_SEARCH"
+               class="uk-form-large uk-width-1-1" />
+		
+        <field
+            name="state"
+            type="list"
+            onchange="this.form.submit();"
+            class=""
+        >
+            <option value="">COM_DW_OPPORTUNITIES_FILTER_STATE</option>
+            <option value="1">COM_DW_OPPORTUNITIES_FILTER_STATE_PUBLISHED</option>
+            <option value="0">COM_DW_OPPORTUNITIES_FILTER_STATE_UNPUBLISHED</option>
+		</field>
+    
+		
+		<field
+               name="created_by"
+               type="sql"
+               default=""
+               class="uk-form-large uk-width-1-1"
+               onchange="this.form.submit();"
+               label="COM_DW_OPPORTUNITIES_RESPONSES_FILTER_CREATED_BY"
+               key_field="id"
+               value_field="title"
+               query=""
+        />
+		
+        <field
+            name="category"
+            type="list"
+            onchange="this.form.submit();"
+            class="uk-form-large uk-hidden"
+        >
+            <option value="">category</option>
+            <option value="local">local</option>
+            <option value="virtual">virtual</option>
+		
+		</field>
+		 <fieldset name="geolocation"  addfieldpath="/components/com_donorwiz/models/fields/addressautocomplete">
+			<field
+				name="nearby"
+				type="addressautocomplete"
+				class="uk-form-large"
+			>
+	
+			
+			</field>
+		</fieldset>
+		
+		
+    </fields>
+    
+   	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			class=""
+			label="COM_CONTENT_LIST_FULL_ORDERING"
+			description="COM_CONTENT_LIST_FULL_ORDERING_DESC"
+			onchange="this.form.submit();"
+			default="a.modified DESC"
+			>
+			<option value="a.created ASC">COM_DW_OPPORTUNITIES_SORT_BY_DATE_ASC</option>
+			<option value="a.created DESC">COM_DW_OPPORTUNITIES_SORT_BY_DATE_DESC</option>
+
+
+		</field>
+		
+		<field
+			name="limit"
+			type="limitbox"
+			class=""
+			default="25"
+			label="COM_CONTENT_LIST_LIMIT"
+			description="COM_CONTENT_LIST_LIMIT_DESC"
+			onchange="this.form.submit();"
+		/>
+		
+	</fields>
+    
+</form>
