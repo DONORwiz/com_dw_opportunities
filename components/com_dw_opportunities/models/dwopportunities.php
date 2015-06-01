@@ -342,6 +342,9 @@ class Dw_opportunitiesModelDwOpportunities extends JModelList
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
+		else{
+			$query->order('a.created desc');
+		}
 
 		return $query;
 	}

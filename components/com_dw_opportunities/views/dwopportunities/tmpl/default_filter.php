@@ -110,7 +110,7 @@ if (isset($filterForm))
 				
 				<div class="uk-grid uk-grid-small">
 					<div class="uk-width-1-2">
-					<?php if ( $filterCreatedBy !=  $user->id ) :?>
+					<?php if ( $filterCreatedBy !=  $user->id || $user -> guest) :?>
 						<?php echo $filters['filter_created_by']->input;?>
 					<?php endif; ?>
 					</div>
