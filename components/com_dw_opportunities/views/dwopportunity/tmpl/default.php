@@ -131,7 +131,7 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 		</div>
 		
 		<div class="uk-width-1-1">
-				<?php echo JLayoutHelper::render( 'info' , array( 'beneficiary_id' => $item -> created_by ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/beneficiary' , null ); ?>	
+				<?php echo JLayoutHelper::render( 'user.info' , array( 'beneficiary_id' => $item -> created_by ) , JPATH_ROOT .'/components/com_donorwiz/layouts' , null ); ?>	
 		</div>
 
 		<div class="uk-width-1-1">
