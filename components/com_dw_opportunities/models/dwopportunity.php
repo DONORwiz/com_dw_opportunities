@@ -142,6 +142,10 @@ class Dw_opportunitiesModelDwOpportunity extends JModelItem {
 	
 	protected function getItemStartDateExpired( $date_start ){
 		
+		if( $date_start=='0000-00-00' ){
+			return false;
+		}
+		
 		$startDateExpired = false;
 		
 		//Check if start date is earlier than today

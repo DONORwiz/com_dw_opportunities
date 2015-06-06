@@ -63,11 +63,10 @@
 			label="COM_CONTENT_LIST_FULL_ORDERING"
 			description="COM_CONTENT_LIST_FULL_ORDERING_DESC"
 			onchange="this.form.submit();"
-			default="a.modified DESC"
+			default="a.created DESC"
 			>
-			<option value="a.created ASC">COM_DW_OPPORTUNITIES_SORT_BY_DATE_ASC</option>
 			<option value="a.created DESC">COM_DW_OPPORTUNITIES_SORT_BY_DATE_DESC</option>
-
+			<option value="a.created ASC">COM_DW_OPPORTUNITIES_SORT_BY_DATE_ASC</option>
 
 		</field>
 		

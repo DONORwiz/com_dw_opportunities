@@ -40,7 +40,7 @@ if (isset($filterForm))
 {
 	
     //Filter created_by
-	$created_by_query = 'SELECT "" AS id, "'.JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION').'" AS title UNION ALL SELECT DISTINCT a.created_by , b.name FROM #__dw_opportunities as A LEFT JOIN #__users AS b ON a.created_by=b.id';
+	$created_by_query = 'SELECT "" AS id, "'.JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITIES_FILTERS_ORGANIZATION').'" AS title UNION ALL SELECT DISTINCT a.created_by , b.name FROM #__dw_opportunities as a LEFT JOIN #__users AS b ON a.created_by=b.id';
     $filterForm->setFieldAttribute( 'created_by', 'query' ,$created_by_query, 'filter' );
 	//Filter created_by -------------------------------------------------------------------------------------------
     
@@ -110,7 +110,7 @@ if (isset($filterForm))
 				
 				<div class="uk-grid uk-grid-small">
 					<div class="uk-width-1-2">
-					<?php if ( $filterCreatedBy !=  $user->id ) :?>
+					<?php if ( $filterCreatedBy !=  $user->id || $user -> guest) :?>
 						<?php echo $filters['filter_created_by']->input;?>
 					<?php endif; ?>
 					</div>

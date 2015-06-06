@@ -2,26 +2,21 @@
 
 defined('_JEXEC') or die;
 
+JFactory::getLanguage()->load('com_donorwiz');
+
 $item = $displayData['item'];
 $isDashboard = $displayData['isDashboard'];
 
 $descrLength = ( isset ( $displayData['descrLength'] ) ) ? $displayData['descrLength'] : 0 ;
 
-$app = JFactory::getApplication();
-
-$jinput = $app->input;
-
-$jinputFilter = $jinput->get('filter','','array');
-
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 $created_by = CFactory::getUser( $item->created_by ) ;
-
 $created_by_name = $created_by->getDisplayName();
 $avatarUrl = $created_by->getThumbAvatar();
 
 ?>
 
-<div class="uk-panel uk-panel-box uk-panel-blank uk-panel-border uk-panel-shadow volunteering-opportunity uk-margin-small teaser uk-visible-hover-inline<?php if( $item -> state == '0' ) echo ' uk-panel-transparent' ;?><?php echo ' featured_'.$item->featured; ?>"  data-title="<?php echo $this->escape($item->title); ?>" data-address="<?php echo $this->escape($item->address); ?>" data-lat="<?php echo $this->escape($item->lat); ?>" data-lng="<?php echo $this->escape($item->lng); ?>">
+<div class="uk-panel uk-panel-box uk-panel-blank uk-panel-border uk-panel-shadow volunteering-opportunity uk-margin-small teaser<?php if( $item -> state == '0' ) echo ' uk-panel-transparent' ;?><?php echo ' featured_'.$item->featured; ?>"  data-title="<?php echo $this->escape($item->title); ?>" data-address="<?php echo $this->escape($item->address); ?>" data-lat="<?php echo $this->escape($item->lat); ?>" data-lng="<?php echo $this->escape($item->lng); ?>">
 
 	<div class="uk-grid">
 			
@@ -30,6 +25,24 @@ $avatarUrl = $created_by->getThumbAvatar();
 			<a class="" href="<?php echo JRoute::_('index.php?option=com_dw_opportunities&view=dwopportunity&Itemid=261&id='.(int) $item->id); ?>" style="text-decoration:none!important">
 				<img class="uk-thumbnail uk-border-circle uk-animation-slide-left" src="<?php echo $avatarUrl ; ?>" alt="<?php echo $created_by_name; ?>" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_MORE_ABOUT_OPPORTUNITY');?> <?php echo $item->title; ?>" data-uk-tooltip>
 			</a>
+			
+			<?php echo JLayoutHelper::render(
+				'popup-button', 
+				array (
+					'isAjax' => true,
+					'buttonLink' => JRoute::_('index.php?option=com_donorwiz&view=login&Itemid=314&mode=register&return='.base64_encode(JFactory::getURI()->toString()).'&'. JSession::getFormToken() .'=1'),
+					'buttonText' => JText::_('COM_DONORWIZ_PROFILE'),
+					'buttonIcon' => '',
+					'buttonType' => 'uk-hidden-small uk-button uk-button-link',
+
+					'layoutPath' => JPATH_ROOT .'/components/com_donorwiz/layouts',
+					'layoutName' => 'user.info',
+					'layoutParams' => array( 'beneficiary_id' => $item -> created_by , 'isPopup'=>true ),
+					'scripts'=>array(Juri::base() . 'media/com_donorwiz/js/registration.js')
+				), 
+				JPATH_ROOT .'/components/com_donorwiz/layouts/popup' , 
+				null ); 
+			?>			
 
 		</div>	
 
@@ -45,7 +58,7 @@ $avatarUrl = $created_by->getThumbAvatar();
 				</h2>
 			</a>
 			
-			<?php echo JLayoutHelper::render( 'meta.opportunity' , array( 'created_by_id' => $this->escape($item->created_by) , 'item' => $item )  , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>
+			<?php echo JLayoutHelper::render( 'elements.meta' , array( 'created_by_id' => $this->escape($item->created_by) , 'item' => $item )  , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>
 			
 			<div>			
 			
@@ -71,11 +84,11 @@ $avatarUrl = $created_by->getThumbAvatar();
 			<div class="uk-grid uk-margin-small-top">
 				
 				<div class="uk-width-medium-1-1">
-					<?php echo JLayoutHelper::render( 'category' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/elements' , null ); ?>	
+					<?php echo JLayoutHelper::render( 'elements.category' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>	
 				</div>
 
 				<div class="uk-width-medium-1-1 uk-margin-small-top">
-					<?php echo JLayoutHelper::render( 'schedule' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts/elements' , null ); ?>	
+					<?php echo JLayoutHelper::render( 'elements.schedule' , array( 'item' => $item ) , JPATH_ROOT .'/components/com_dw_opportunities/layouts' , null ); ?>	
 				</div>		
 
 			</div>
@@ -88,13 +101,7 @@ $avatarUrl = $created_by->getThumbAvatar();
 					<?php echo JText::_('COM_DW_OPPORTUNITIES_READ_MORE');?>
 				</a>	
 				</div>
-				<!-- www.addthis.com 
-				<div class="uk-width-1-2 uk-hidden uk-text-right">
-				
-				<div class="addthis_sharing_toolbox"></div>
 
-				</div>
-				-->
 			</div>
 			
 			<?php endif;?>
@@ -107,11 +114,6 @@ $avatarUrl = $created_by->getThumbAvatar();
 				<?php echo JText::_('COM_DW_OPPORTUNITIES_READ_MORE');?>
 			</a>		
 		</div>
-
-
 		
 	</div>	
-	</div>	
-
-
-	
+</div>	
