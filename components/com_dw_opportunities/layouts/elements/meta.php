@@ -5,15 +5,13 @@ defined('_JEXEC') or die;
 
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 
-$created_by_id = $displayData['created_by_id'];
+$created_by = $displayData['created_by_id'];
 
 $item = $displayData['item'];
 
-$created_by = CFactory::getUser( $created_by_id ) ;
+$cuser = CFactory::getUser( $created_by ) ;
 
-$created_by_name = $created_by->getDisplayName();
-
-$link = CRoute::_('index.php?option=com_community&view=profile&userid='.$created_by_id); 
+$created_by_name = $cuser->getDisplayName();
 
 ?>
 
@@ -31,9 +29,9 @@ $link = CRoute::_('index.php?option=com_community&view=profile&userid='.$created
 			'buttonText' => $created_by_name,
 			'buttonIcon' => '',
 			'buttonType' => 'uk-button uk-button-link uk-button-mini uk-hidden-large uk-hidden-medium uk-display-block uk-text-right',
-			'layoutPath' => JPATH_ROOT .'/components/com_dw_opportunities/layouts/beneficiary',
-			'layoutName' => 'info',
-			'layoutParams' => array( 'beneficiary_id' => $item -> created_by , 'isPopup'=>true ),
+			'layoutPath' => JPATH_ROOT .'/components/com_donorwiz/layouts',
+			'layoutName' => 'user.info',
+			'layoutParams' => array( 'beneficiary_id' => $created_by , 'isPopup'=>true ),
 			'scripts'=>array(Juri::base() . 'media/com_donorwiz/js/registration.js')
 		), 
 		JPATH_ROOT .'/components/com_donorwiz/layouts/popup' , 
