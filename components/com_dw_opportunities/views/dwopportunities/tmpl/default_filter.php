@@ -130,12 +130,13 @@ if (isset($filterForm))
 	
 	</div>
     
+	
     <?php echo $filters['filter_category']->input;?>
     <div class="uk-grid uk-grid-small uk-margin-small-top">
 			
 		<div class="uk-width-medium-1-2">
 		
-			<a class="uk-button uk-button-large uk-width-1-1 truncate <?php if( $filterArray['category'] == 'local') echo 'uk-active uk-button-success'; ?>" 
+			<a class="uk-button uk-button-large uk-width-1-1 truncate <?php if( $activeFilters['category'] == 'local') echo 'uk-active uk-button-success'; ?>" 
                 onclick="event.preventDefault();if ( jQuery('#filter_category').val()=='local' ) { jQuery('#filter_category').val('') } else { jQuery('#filter_category').val('local') };jQuery('#dwopportunities_default_filter').trigger('submit');"
                 href="#" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_LOCAL_TOOLTIP');?>">
 				<i class="uk-icon-map-marker uk-icon-small"></i>
@@ -146,7 +147,7 @@ if (isset($filterForm))
 			
 		<div class="uk-width-medium-1-2">
 			
-			<a class="uk-button uk-button-large uk-width-1-1 truncate <?php if( $filterArray['category'] == 'virtual') {echo 'uk-active uk-button-success';} ?>" 
+			<a class="uk-button uk-button-large uk-width-1-1 truncate <?php if( $activeFilters['category'] == 'virtual') {echo 'uk-active uk-button-success';} ?>" 
                 onclick="event.preventDefault();if ( jQuery('#filter_category').val()=='virtual' ) { jQuery('#filter_category').val('') } else { jQuery('#filter_category').val('virtual') };jQuery('#dwopportunities_default_filter').trigger('submit');"
                 href="#" data-uk-tooltip="{pos:'bottom'}" title="<?php echo JText::_('COM_DW_OPPORTUNITIES_OPPORTUNITY_VIRTUAL_TOOLTIP');?>">
               	<i class="uk-icon-laptop uk-icon-small"></i>
