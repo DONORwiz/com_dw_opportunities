@@ -109,7 +109,7 @@ if (isset($filterForm))
 			<div class="uk-width-medium-1-2">
 				
 				<div class="uk-grid uk-grid-small">
-					<div class="uk-width-1-2">
+					<div class="uk-width-medium-1-2">
 					<?php if ( $filterCreatedBy !=  $user->id || $user -> guest) :?>
 						<?php echo $filters['filter_created_by']->input;?>
 					<?php endif; ?>
@@ -160,11 +160,13 @@ if (isset($filterForm))
 
 <?php endif; ?>
     
-    <div class="uk-margin-small-top">
-        
+    <div class="uk-margin-small-top uk-text-right">
+
+        <a class="uk-button uk-button-link uk-button-primary uk-display-inline-block" data-uk-toggle="{target:'#filter-options'}"><i class="uk-icon-filter uk-margin-small-right"></i><?php echo JText::_('COM_DW_OPPORTUNITIES_FILTER_OPTIONS'); ?></a>
+	
         <?php if ($list) : ?>
     
-            <div class="uk-float-right">
+            <div class="uk-display-inline-block">
  
                  <?php if( $filters && $user->authorise('core.edit.state', 'com_dw_opportunities') && $isDashboard ) : ?>
                     <?php echo $filters['filter_state']->input;?>
@@ -180,11 +182,10 @@ if (isset($filterForm))
         
         <?php endif; ?>
         
-        <a class="uk-button uk-button-link uk-button-primary uk-float-right" data-uk-toggle="{target:'#filter-options'}"><i class="uk-icon-filter uk-margin-small-right"></i><?php echo JText::_('COM_DW_OPPORTUNITIES_FILTER_OPTIONS'); ?></a>
         
         <?php if ( $filters && !empty ( $activeFilters ) ) :?>
         
-            <button type="submit" onclick="jQuery('[name^=filter]').removeAttr('value');this.form.submit();" class="uk-button uk-float-right uk-button-primary"><i class="uk-icon-remove"></i></button>
+            <button type="submit" onclick="jQuery('[name^=filter]').removeAttr('value');this.form.submit();" class="uk-button uk-display-inline-block uk-button-primary"><i class="uk-icon-remove"></i></button>
         
         <?php endif;?>
         
