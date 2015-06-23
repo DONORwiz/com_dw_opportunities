@@ -91,20 +91,12 @@ class Dw_opportunitiesViewDwOpportunity extends JViewLegacy {
 		$this->document->setMetadata('keywords', $this -> item -> title . ', ' .  CFactory::getUser( $this -> item -> created_by ) -> name . ', ' . $app->getCfg('sitename') );
 		
 		//Open graph
-		
-		//Basic
-		$this->document->setMetadata('og:title', $this -> item -> title . ' - ' . $app->getCfg('sitename') );
-		$this->document->setMetadata('og:type', 'website');
-		$og_image = ( $this -> item -> image ) ? $this -> item -> image : 'http://assets.donorwiz.com/logo/logo.png' ;
-		$this->document->setMetadata('og:image', $og_image );
-		$this->document->setMetadata('og:url', $item_url);
-		
-		//Optional
-		$this->document->setMetadata('og:locale',  str_replace ( '-' , '_' ,JFactory::getLanguage() ->getTag()  ) );
-		$this->document->setMetadata('og:site_name', 'DONORwiz');
-		
+		if ( $this -> item -> image ) { 
+			$this->document->addCustomTag('<meta property="og:image" content="'.$this -> item -> image.'" />' );
+		}
+
 		if( $this -> item -> parameters -> video ){
-			$this->document->setMetadata('og:video', $this -> item -> parameters -> video);
+			$this->document->addCustomTag('<meta property="og:video" content="'.$this -> item -> parameters -> video.'" />' );
 		}
 	}
 }
