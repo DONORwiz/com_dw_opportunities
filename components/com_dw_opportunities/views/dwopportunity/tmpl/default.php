@@ -149,11 +149,6 @@ $widthClass = ($showMap) ? 'uk-width-large-6-10 uk-width-medium-1-1' : 'uk-width
 			?>	
 		</div>
 		
-		<div class="uk-width-1-1 uk-margin-top">
-			<!-- www.addthis.com -->
-			<div class="addthis_sharing_toolbox"></div>
-		</div>
-		
 		<div class="uk-width-1-1 uk-text-right">
 			<a class="uk-button uk-button-link" href="<?php echo JRoute::_('volunteer'); ?>">
 			<i class="uk-icon-long-arrow-left uk-icon-small"></i>
